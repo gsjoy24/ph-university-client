@@ -1,17 +1,44 @@
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, MenuProps } from 'antd';
 import { createElement } from 'react';
 
 const { Header, Content, Footer, Sider } = Layout;
-const items = [UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map((icon, index) => ({
-	key: String(index + 1),
-	icon: createElement(icon),
-	label: `nav ${index + 1}`
-}));
+const items: MenuProps['items'] = [
+	{
+		key: '1',
+		label: 'Dashboard'
+	},
+	{
+		key: '2',
+		label: 'Profile'
+	},
+	{
+		key: '3',
+		label: 'User Management',
+		children: [
+			{
+				key: '3.1',
+				label: 'Create Admin'
+			},
+			{
+				key: '3.2',
+				label: 'Create Student'
+			},
+			{
+				key: '3.3',
+				label: 'Create Faculty'
+			}
+		]
+	},
+	{
+		key: '4',
+		label: 'Upload'
+	}
+];
 
 const MainLayout = () => {
 	return (
-		<Layout>
+		<Layout style={{ minHeight: '100vh' }}>
 			<Sider
 				breakpoint='lg'
 				collapsedWidth='0'
@@ -22,7 +49,9 @@ const MainLayout = () => {
 					console.log(collapsed, type);
 				}}
 			>
-				<div className='demo-logo-vertical' />
+				<div style={{ height: '2rem', textAlign: 'center', color: 'white', marginTop: '20px' }}>
+					<h1>PH University</h1>
+				</div>
 				<Menu theme='dark' mode='inline' defaultSelectedKeys={['4']} items={items} />
 			</Sider>
 			<Layout>
