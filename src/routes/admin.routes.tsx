@@ -33,45 +33,6 @@ const adminPaths = [
 	}
 ];
 
-// const adminPaths: TRoute[] = [
-// 	{
-// 		path: 'dashboard',
-// 		element: <AdminDashboard />
-// 	},
-// 	{
-// 		path: 'create-student',
-// 		element: <CreateStudent />
-// 	},
-// 	{
-// 		path: 'create-faculty',
-// 		element: <CreateFaculty />
-// 	},
-// 	{
-// 		path: 'create-admin',
-// 		element: <CreateAdmin />
-// 	}
-// ];
-
-export const adminRoutes = adminPaths.reduce((acc: TRoute[], item) => {
-	if (item.path && item.element) {
-		acc.push({
-			path: item.path,
-			element: item.element
-		});
-	}
-	if (item.children) {
-		item.children.forEach((child) => {
-			if (child.path && child.element) {
-				acc.push({
-					path: child.path,
-					element: child.element
-				});
-			}
-		});
-	}
-	return acc;
-}, []);
-
 export const adminSidebarItems = adminPaths.reduce((acc: TNavItem[], item) => {
 	if (item.name && item.path) {
 		acc.push({
