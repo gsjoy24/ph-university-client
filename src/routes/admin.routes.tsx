@@ -4,7 +4,7 @@ import CreateFaculty from '../pages/admin/CreateFaculty';
 import CreateStudent from '../pages/admin/CreateStudent';
 import { TRoute } from './routes.interface';
 
-const adminPaths2 = [
+const adminPaths = [
 	{
 		name: 'Dashboard',
 		path: 'dashboard',
@@ -32,26 +32,26 @@ const adminPaths2 = [
 	}
 ];
 
-const adminPaths: TRoute[] = [
-	{
-		path: 'dashboard',
-		element: <AdminDashboard />
-	},
-	{
-		path: 'create-student',
-		element: <CreateStudent />
-	},
-	{
-		path: 'create-faculty',
-		element: <CreateFaculty />
-	},
-	{
-		path: 'create-admin',
-		element: <CreateAdmin />
-	}
-];
+// const adminPaths: TRoute[] = [
+// 	{
+// 		path: 'dashboard',
+// 		element: <AdminDashboard />
+// 	},
+// 	{
+// 		path: 'create-student',
+// 		element: <CreateStudent />
+// 	},
+// 	{
+// 		path: 'create-faculty',
+// 		element: <CreateFaculty />
+// 	},
+// 	{
+// 		path: 'create-admin',
+// 		element: <CreateAdmin />
+// 	}
+// ];
 
-const newArray = adminPaths2.reduce((acc: TRoute[], item) => {
+export const adminRoutes = adminPaths.reduce((acc: TRoute[], item) => {
 	if (item.path && item.element) {
 		acc.push({
 			path: item.path,
