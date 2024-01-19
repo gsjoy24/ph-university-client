@@ -1,11 +1,4 @@
-import { TRoute } from '../routes/routes.interface';
-
-type TUserPath = {
-	name: string;
-	path?: string;
-	element?: JSX.Element;
-	children?: TUserPath[];
-};
+import { TRoute, TUserPath } from '../types';
 
 const routesGenerator = (items: TUserPath[]) => {
 	const routes = items.reduce((acc: TRoute[], item) => {
