@@ -8,13 +8,27 @@ const baseQuery = fetchBaseQuery({
 		const token = (getState() as RootState).auth.token;
 		if (token) {
 			headers.set('authorization', `${token}`);
-		}
+		}  
+
+
+
+
+
+
+
+		
 		return headers;
 	}
 });
 
 const baseQueryWithRefreshToken = async (args: any, api: any, extraOptions: any) => {
-	return await baseQuery(args, api, extraOptions);
+	const result = await baseQuery(args, api, extraOptions);
+	if (result.error?.status === 401) {
+		const refreshResult = await fetch(`auth/refresh-token`, {
+			method: 'POST',
+			credentials: 'include'
+		});
+	}
 };
 
 export const baseApi = createApi({
