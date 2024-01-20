@@ -1,9 +1,9 @@
 import { Navigate } from 'react-router-dom';
 import { useAppSelector } from '../../redux/hooks';
-import { useCurrentToken } from '../../redux/store';
+import { selectCurrentToken } from '../../redux/features/auth/authSlice';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-	const token = useAppSelector(useCurrentToken);
+	const token = useAppSelector(selectCurrentToken);
 	if (!token) {
 		return <Navigate to='/login' replace />;
 	}
