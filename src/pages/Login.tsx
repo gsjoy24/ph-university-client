@@ -7,6 +7,7 @@ import { verifyToken } from '../utils/verifyToken';
 import { useNavigate } from 'react-router-dom';
 import { TUser } from '../types';
 import { toast } from 'sonner';
+import PHForm from '../components/form/PHForm';
 
 const Login = () => {
 	const { register, handleSubmit } = useForm({
@@ -32,7 +33,7 @@ const Login = () => {
 		}
 	};
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<PHForm onSubmit={handleSubmit(onSubmit)}>
 			<div>
 				<label htmlFor='id'>ID:</label>
 				<input type='text' id='id' {...register('id')} />
@@ -44,7 +45,7 @@ const Login = () => {
 			<Button type='dashed' htmlType='submit'>
 				{isLoading ? 'Loading...' : 'Login'}
 			</Button>
-		</form>
+		</PHForm>
 	);
 };
 
