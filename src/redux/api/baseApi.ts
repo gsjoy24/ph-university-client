@@ -1,4 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+	BaseQueryApi,
+	BaseQueryFn,
+	DefinitionType,
+	FetchArgs,
+	createApi,
+	fetchBaseQuery
+} from '@reduxjs/toolkit/query/react';
 import { RootState } from '../store';
 import { logOut, setUser } from '../features/auth/authSlice';
 
@@ -10,12 +17,15 @@ const baseQuery = fetchBaseQuery({
 		if (token) {
 			headers.set('authorization', `${token}`);
 		}
-
 		return headers;
 	}
 });
 
-const baseQueryWithRefreshToken = async (args: any, api: any, extraOptions: any) => {
+const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs, BaseQueryApi, DefinitionType> = async (
+	args: any,
+	api: any,
+	extraOptions: any
+): Promise<any> => {
 	let result = await baseQuery(args, api, extraOptions);
 	if (result.error?.status === 401) {
 		const refreshResult = await fetch(`auth/refresh-token`, {
@@ -23,7 +33,7 @@ const baseQueryWithRefreshToken = async (args: any, api: any, extraOptions: any)
 			credentials: 'include'
 		});
 		const data = await refreshResult.json();
-		if (data.data.accessToken) {
+		if (data?.data?.accessToken) {
 			const user = api.getState().auth.user;
 			api.dispatch(
 				setUser({
