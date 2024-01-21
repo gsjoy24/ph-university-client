@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { TUser } from '../types';
 import { toast } from 'sonner';
 import PHForm from '../components/form/PHForm';
+import PHInput from '../components/form/PHInput';
 
 const Login = () => {
 	const { register, handleSubmit } = useForm({
@@ -33,14 +34,12 @@ const Login = () => {
 		}
 	};
 	return (
-		<PHForm onSubmit={handleSubmit(onSubmit)}>
+		<PHForm onSubmit={onSubmit}>
 			<div>
-				<label htmlFor='id'>ID:</label>
-				<input type='text' id='id' {...register('id')} />
+				<PHInput label='ID' name='id' type='text' />
 			</div>
 			<div>
-				<label htmlFor='password'>Password:</label>
-				<input type='text' id='password' {...register('password')} />
+				<PHInput label='Password' name='password' type='text' />
 			</div>
 			<Button type='dashed' htmlType='submit'>
 				{isLoading ? 'Loading...' : 'Login'}
