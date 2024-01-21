@@ -1,10 +1,24 @@
 import { FormProvider, useForm } from 'react-hook-form';
+type TPHFormProps = {
+	onSubmit: (data: any) => void;
+	children: React.ReactNode;
+} & TFormConfig;
 
-const PHForm = ({ onSubmit, children }: { onSubmit: () => void; children: React.ReactNode }) => {
-	const methods = useForm();
+type TFormConfig = {
+	defaultValues?: Record<string, any>;
+};
+
+const PHForm = ({ onSubmit, children, defaultValues }: TPHFormProps) => {
+	const formConfig: TFormConfig = {};
+	if (defaultValues) {
+		formConfig.defaultValues = defaultValues;
+	}
+	const methods = useForm(formConfig);
 	return (
 		<FormProvider {...methods}>
-			<form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+			<form onSubmit={methods.handleSubmit(onSubmit)} style={{ maxWidth: '400px', margin: 'auto', padding: '40px' }}>
+				{children}
+			</form>
 		</FormProvider>
 	);
 };

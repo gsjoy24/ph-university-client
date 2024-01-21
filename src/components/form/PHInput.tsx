@@ -1,4 +1,6 @@
-import { useFormContext } from 'react-hook-form';
+import { Input } from 'antd';
+import { Controller } from 'react-hook-form';
+
 type TInputProps = {
 	name: string;
 	type: string;
@@ -6,12 +8,20 @@ type TInputProps = {
 };
 
 const PHInput = ({ name, type, label }: TInputProps) => {
-	const { register } = useFormContext();
 	return (
-		<>
-			{label && <label htmlFor={name}>{label}:</label>}
-			<input type={type} id={name} {...register(name)} />
-		</>
+		<div>
+			{label && (
+				<label style={{ marginBottom: '10px', display: 'inline-block' }} htmlFor={name}>
+					{label}:
+				</label>
+			)}
+			<Controller
+				name={name}
+				render={({ field }) => (
+					<Input {...field} variant='filled' type={type} id={name} placeholder={name.toUpperCase()} />
+				)}
+			/>
+		</div>
 	);
 };
 

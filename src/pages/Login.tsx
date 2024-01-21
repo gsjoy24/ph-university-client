@@ -11,12 +11,7 @@ import PHForm from '../components/form/PHForm';
 import PHInput from '../components/form/PHInput';
 
 const Login = () => {
-	const { register, handleSubmit } = useForm({
-		defaultValues: {
-			id: 'A-0001',
-			password: 'securePassword123'
-		}
-	});
+	const defaultValues = { id: 'A-0001', password: 'securePassword123' };
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const [login, { isLoading }] = useLoginMutation();
@@ -34,13 +29,10 @@ const Login = () => {
 		}
 	};
 	return (
-		<PHForm onSubmit={onSubmit}>
-			<div>
-				<PHInput label='ID' name='id' type='text' />
-			</div>
-			<div>
-				<PHInput label='Password' name='password' type='text' />
-			</div>
+		<PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
+			<PHInput label='ID' name='id' type='text' />
+			<PHInput label='Password' name='password' type='text' />
+			<br />
 			<Button type='dashed' htmlType='submit'>
 				{isLoading ? 'Loading...' : 'Login'}
 			</Button>
