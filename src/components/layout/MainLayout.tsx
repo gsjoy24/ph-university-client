@@ -1,8 +1,8 @@
 import { Button, Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
-import Sidebar from './Sidebar';
-import { useAppDispatch } from '../../redux/hooks';
 import { logOut } from '../../redux/features/auth/authSlice';
+import { useAppDispatch } from '../../redux/hooks';
+import Sidebar from './Sidebar';
 
 const { Header, Content } = Layout;
 

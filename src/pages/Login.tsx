@@ -1,14 +1,14 @@
 import { Button } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
-import { useLoginMutation } from '../redux/features/auth/authApi';
-import { useAppDispatch } from '../redux/hooks';
-import { setUser } from '../redux/features/auth/authSlice';
-import { verifyToken } from '../utils/verifyToken';
 import { useNavigate } from 'react-router-dom';
-import { TUser } from '../types';
 import { toast } from 'sonner';
 import PHForm from '../components/form/PHForm';
 import PHInput from '../components/form/PHInput';
+import { useLoginMutation } from '../redux/features/auth/authApi';
+import { setUser } from '../redux/features/auth/authSlice';
+import { useAppDispatch } from '../redux/hooks';
+import { TUser } from '../types';
+import { verifyToken } from '../utils/verifyToken';
 
 const Login = () => {
 	const defaultValues = { id: 'A-0001', password: 'securePassword123' };

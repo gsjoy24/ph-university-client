@@ -6,8 +6,8 @@ import {
 	createApi,
 	fetchBaseQuery
 } from '@reduxjs/toolkit/query/react';
-import { RootState } from '../store';
 import { logOut, setUser } from '../features/auth/authSlice';
+import { RootState } from '../store';
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: import.meta.env.VITE_SERVER_URL,
