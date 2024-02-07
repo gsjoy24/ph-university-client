@@ -11,7 +11,7 @@ import { TUser } from '../types';
 import { verifyToken } from '../utils/verifyToken';
 
 const Login = () => {
-	const defaultValues = { id: 'A-0001', password: 'securePassword123' };
+	const defaultValues = { userId: 'A-0001', password: 'securePassword123' };
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const [login, { isLoading }] = useLoginMutation();
@@ -30,8 +30,8 @@ const Login = () => {
 	};
 	return (
 		<PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
-			<PHInput label='ID' name='id' type='text' />
-			<PHInput label='Password' name='password' type='text' />
+			<PHInput label='ID' name='userId' type='text' />
+			<PHInput label='Password' name='password' type='password' />
 			<br />
 			<Button type='dashed' htmlType='submit'>
 				{isLoading ? 'Loading...' : 'Login'}
