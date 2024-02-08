@@ -16,7 +16,7 @@ const PHForm = ({ onSubmit, children, defaultValues }: TPHFormProps) => {
 	const methods = useForm(formConfig);
 	return (
 		<FormProvider {...methods}>
-			<form onSubmit={methods.handleSubmit(onSubmit)} style={{ maxWidth: '400px', margin: 'auto', padding: '40px' }}>
+			<form onSubmit={methods.handleSubmit(onSubmit)} style={{ margin: 'auto', padding: '40px' }}>
 				{children}
 			</form>
 		</FormProvider>

@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Flex } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -29,14 +29,16 @@ const Login = () => {
 		}
 	};
 	return (
-		<PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
-			<PHInput label='ID' name='userId' type='text' />
-			<PHInput label='Password' name='password' type='password' />
-			<br />
-			<Button type='dashed' htmlType='submit'>
-				{isLoading ? 'Loading...' : 'Login'}
-			</Button>
-		</PHForm>
+		<Flex justify='center' align='center'>
+			<PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
+				<PHInput label='ID' name='userId' type='text' />
+				<PHInput label='Password' name='password' type='password' />
+				<br />
+				<Button type='dashed' htmlType='submit'>
+					{isLoading ? 'Loading...' : 'Login'}
+				</Button>
+			</PHForm>
+		</Flex>
 	);
 };
 
