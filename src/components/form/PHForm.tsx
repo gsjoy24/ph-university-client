@@ -1,3 +1,4 @@
+import { Form } from 'antd';
 import { FormProvider, useForm } from 'react-hook-form';
 type TPHFormProps = {
 	onSubmit: (data: any) => void;
@@ -16,9 +17,9 @@ const PHForm = ({ onSubmit, children, defaultValues }: TPHFormProps) => {
 	const methods = useForm(formConfig);
 	return (
 		<FormProvider {...methods}>
-			<form onSubmit={methods.handleSubmit(onSubmit)} style={{ margin: 'auto', padding: '40px' }}>
+			<Form onFinish={methods.handleSubmit(onSubmit)} style={{ margin: 'auto', padding: '40px' }}>
 				{children}
-			</form>
+			</Form>
 		</FormProvider>
 	);
 };

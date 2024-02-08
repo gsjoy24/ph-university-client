@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Col, Flex } from 'antd';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
@@ -8,13 +8,17 @@ const CreateAcademicSemester = () => {
 		console.log(data);
 	};
 	return (
-		<PHForm onSubmit={onSubmit}>
-			<h1>This is CreateAcademicSemester component</h1>
-			<PHInput name='name' type='text' label='name' />
-			<Button type='primary' htmlType='submit'>
-				Submit
-			</Button>
-		</PHForm>
+		<Flex justify='center' align='center'>
+			<Col span={12}>
+				<PHForm onSubmit={onSubmit}>
+					<h1>This is CreateAcademicSemester component</h1>
+					<PHInput name='name' type='text' label='name' />
+					<Button type='primary' htmlType='submit'>
+						Submit
+					</Button>
+				</PHForm>
+			</Col>
+		</Flex>
 	);
 };
 
