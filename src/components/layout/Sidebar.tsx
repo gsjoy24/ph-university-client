@@ -1,12 +1,12 @@
-import Sider from 'antd/es/layout/Sider';
-import sidebarItemsGenerator from '../../utils/sidebarItemsGenerator';
-import adminPaths from '../../routes/admin.routes';
 import { Menu } from 'antd';
-import { userRoles } from '../../utils/userRoles';
+import Sider from 'antd/es/layout/Sider';
+import { selectCurrentUser } from '../../redux/features/auth/authSlice';
+import { useAppSelector } from '../../redux/hooks';
+import adminPaths from '../../routes/admin.routes';
 import { facultyPaths } from '../../routes/faculty.routes';
 import { studentPaths } from '../../routes/student.routes';
-import { useAppSelector } from '../../redux/hooks';
-import { selectCurrentUser } from '../../redux/features/auth/authSlice';
+import sidebarItemsGenerator from '../../utils/sidebarItemsGenerator';
+import { userRoles } from '../../utils/userRoles';
 
 const Sidebar = () => {
 	const user = useAppSelector(selectCurrentUser);
@@ -27,7 +27,7 @@ const Sidebar = () => {
 			break;
 	}
 	return (
-		<Sider breakpoint='lg' collapsedWidth='0'>
+		<Sider width={'220px'} breakpoint='lg' collapsedWidth='0'>
 			<div style={{ height: '2rem', textAlign: 'center', color: 'white', marginTop: '20px' }}>
 				<h1>PH University</h1>
 			</div>
