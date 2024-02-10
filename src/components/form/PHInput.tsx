@@ -13,8 +13,8 @@ const PHInput = ({ name, type, label }: TInputProps) => {
 			<Controller
 				name={name}
 				render={({ field }) => (
-					<Form.Item label={label.toUpperCase()}>
-						<Input {...field} variant='filled' type={type} id={name} placeholder={name.toUpperCase()} />
+					<Form.Item label={label}>
+						<Input {...field} type={type} id={name} placeholder={name} size='large' />
 					</Form.Item>
 				)}
 			/>
