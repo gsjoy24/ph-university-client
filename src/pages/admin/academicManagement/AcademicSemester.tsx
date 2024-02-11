@@ -1,5 +1,6 @@
-import { Table, TableColumnsType, TableProps } from 'antd';
+import { Button, Flex, Table, TableColumnsType, TableProps } from 'antd';
 import React, { useState } from 'react';
+import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
 import { TAcademicSemester } from '../../../types';
 
@@ -61,6 +62,20 @@ const columns: TableColumnsType<TDataType> = [
 	{
 		title: 'End Month',
 		dataIndex: 'endMonth'
+	},
+	{
+		title: 'Action',
+		key: 'action',
+		render: () => (
+			<Flex>
+				<Button type='text' size='small'>
+					<AiOutlineEdit size={20} />
+				</Button>
+				<Button type='text' size='small'>
+					<AiOutlineDelete size={18} />
+				</Button>
+			</Flex>
+		)
 	}
 ];
 
