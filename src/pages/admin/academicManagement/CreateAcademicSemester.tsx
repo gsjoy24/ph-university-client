@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Col, Flex, Select, Spin } from 'antd';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
+import { toast } from 'sonner';
 import PHForm from '../../../components/form/PHForm';
 import PHSelect from '../../../components/form/PHSelect';
 import { monthNamesOptions } from '../../../constants/global';
@@ -17,8 +18,9 @@ const yearOptions = Array.from({ length: 5 }, (_, i) => currentYear + i).map((ye
 }));
 
 const CreateAcademicSemester = () => {
-	const [addAcademicSemester, { isLoading, isError }] = useAddAcademicSemesterMutation();
-	const onSubmit: SubmitHandler<FieldValues> = ({ code, year, startMonth, endMonth }: any) => {
+	const [addAcademicSemester, { isLoading }] = useAddAcademicSemesterMutation();
+
+	const onSubmit: SubmitHandler<FieldValues> = async ({ code, year, startMonth, endMonth }: any) => {
 		const findData = semesterOptions.find((item) => item?.value === code);
 		const semesterData: TSemesterData = {
 			name: findData!.label,
@@ -27,6 +29,14 @@ const CreateAcademicSemester = () => {
 			endMonth,
 			year
 		};
+
+		try {
+			const res = await addAcademicSemester(semesterData);
+			// toast.success(res?.data?.message || 'Semester created successfully');
+		} catch (error) {
+			console.log('error:', error);
+			// toast.error(error?.data?.message || 'Something went wrong!');
+		}
 	};
 
 	return (
