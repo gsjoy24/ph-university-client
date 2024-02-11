@@ -8,6 +8,7 @@ import { monthNamesOptions } from '../../../constants/global';
 import { semesterOptions } from '../../../constants/semester';
 import { useAddAcademicSemesterMutation } from '../../../redux/features/admin/academicManagement.api';
 import { academicSemesterSchema } from '../../../schemas/academicManagement.schema';
+import { TResponse } from '../../../types/global';
 import TSemesterData from '../../../types/semesterData.type';
 
 // for year options
@@ -31,7 +32,7 @@ const CreateAcademicSemester = () => {
 		};
 
 		try {
-			const res = await addAcademicSemester(semesterData);
+			const res = (await addAcademicSemester(semesterData)) as TResponse;
 
 			if (res?.data?.message) {
 				toast.success(res?.data?.message);
@@ -40,7 +41,7 @@ const CreateAcademicSemester = () => {
 			}
 		} catch (error) {
 			console.log('error:', error);
-			toast.error(error?.message);
+			toast.error('Something went wrong');
 		}
 	};
 
