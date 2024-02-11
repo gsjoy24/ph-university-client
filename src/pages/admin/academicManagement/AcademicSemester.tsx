@@ -1,77 +1,109 @@
 import { Table, TableColumnsType, TableProps } from 'antd';
+import React, { useState } from 'react';
 import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
-interface DataType {
-	key: React.Key;
+import { TAcademicSemester } from '../../../types';
+
+type TDataType = Pick<TAcademicSemester, 'name' | 'year' | 'startMonth' | 'endMonth'>;
+
+type FilterValue = {
 	name: string;
-	age: number;
-	address: string;
-}
+	value: string;
+};
+const columns: TableColumnsType<TDataType> = [
+	{
+		title: 'Name',
+		dataIndex: 'name',
+		filters: [
+			{
+				text: 'Autumn',
+				value: 'Autumn'
+			},
+			{
+				text: 'Fall',
+				value: 'Fall'
+			},
+			{
+				text: 'Summer',
+				value: 'Summer'
+			}
+		]
+	},
+	{
+		title: 'Year',
+		dataIndex: 'year',
+		filters: [
+			{
+				text: '2024',
+				value: '2024'
+			},
+			{
+				text: '2025',
+				value: '2025'
+			},
+			{
+				text: '2026',
+				value: '2026'
+			},
+			{
+				text: '2027',
+				value: '2027'
+			},
+			{
+				text: '2028',
+				value: '2028'
+			}
+		]
+	},
+	{
+		title: 'Start Month',
+		dataIndex: 'startMonth'
+	},
+	{
+		title: 'End Month',
+		dataIndex: 'endMonth'
+	}
+];
 
 const AcademicSemester = () => {
-	const columns: TableColumnsType<DataType> = [
-		{
-			title: 'Name',
-			dataIndex: 'name'
-		},
-		{
-			title: 'Year',
-			dataIndex: 'year'
-		},
-		{
-			title: 'Start Month',
-			dataIndex: 'startMonth'
-		},
-		{
-			title: 'End Month',
-			dataIndex: 'endMonth'
-		}
-	];
+	const [params, setParams] = useState([] as FilterValue[]);
+	const { data: allSemesters, isFetching } = useGetAllSemestersQuery(params);
 
-	const data = [
-		{
-			key: '1',
-			name: 'John Brown',
-			age: 32,
-			address: 'New York No. 1 Lake Park'
-		},
-		{
-			key: '2',
-			name: 'Jim Green',
-			age: 42,
-			address: 'London No. 1 Lake Park'
-		},
-		{
-			key: '3',
-			name: 'Joe Black',
-			age: 32,
-			address: 'Sydney No. 1 Lake Park'
-		},
-		{
-			key: '4',
-			name: 'Jim Red',
-			age: 32,
-			address: 'London No. 2 Lake Park'
-		}
-	];
+	const onChange: TableProps<TDataType>['onChange'] = (pagination, filters, sorter, extra) => {
+		if (extra.action === 'filter') {
+			const queryArray: FilterValue[] = [];
+			filters.name?.forEach((item) =>
+				queryArray.push({
+					name: 'name',
+					value: item as string
+				})
+			);
+			filters.year?.forEach((item) =>
+				queryArray.push({
+					name: 'year',
+					value: item as string
+				})
+			);
 
-	const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
-		console.log('params', pagination, filters, sorter, extra);
+			setParams(queryArray);
+		}
 	};
-	const { data: allSemesters } = useGetAllSemestersQuery(null);
 
-	const tableData = allSemesters?.data.map(({ _id, name, startMonth, endMonth, year }) => {
-		return {
-			key: _id,
-			name,
-			startMonth,
-			endMonth,
-			year
-		};
-	});
+	const tableData =
+		allSemesters && allSemesters.data
+			? allSemesters.data
+					.filter(({ _id }) => _id !== undefined)
+					.map(({ _id, name, startMonth, endMonth, year }) => {
+						return {
+							key: _id,
+							name,
+							startMonth,
+							endMonth,
+							year
+						};
+					})
+			: [];
 
-	const allSemestersData = allSemesters?.data;
-	console.log(allSemesters);
-	return <Table columns={columns} dataSource={tableData} onChange={onChange} />;
+	return <Table loading={isFetching} columns={columns} dataSource={tableData} onChange={onChange} />;
 };
 
 export default AcademicSemester;

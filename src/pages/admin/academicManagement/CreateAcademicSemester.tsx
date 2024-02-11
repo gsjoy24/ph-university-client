@@ -8,8 +8,8 @@ import { monthNamesOptions } from '../../../constants/global';
 import { semesterOptions } from '../../../constants/semester';
 import { useAddAcademicSemesterMutation } from '../../../redux/features/admin/academicManagement.api';
 import { academicSemesterSchema } from '../../../schemas/academicManagement.schema';
-import { TResponse } from '../../../types/global';
-import TSemesterData from '../../../types/semesterData.type';
+import TAcademicSemester from '../../../types/academicManagement.type';
+import { TResponse } from '../../../types/global.type';
 
 // for year options
 const currentYear = new Date().getFullYear();
@@ -23,7 +23,7 @@ const CreateAcademicSemester = () => {
 
 	const onSubmit: SubmitHandler<FieldValues> = async ({ code, year, startMonth, endMonth }: any) => {
 		const findData = semesterOptions.find((item) => item?.value === code);
-		const semesterData: TSemesterData = {
+		const semesterData: TAcademicSemester = {
 			name: findData!.label,
 			code,
 			startMonth,
