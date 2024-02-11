@@ -13,7 +13,7 @@ const PHSelect = ({ label, name, options }: TPHSelectProps) => {
 		<Controller
 			name={name}
 			render={({ field, fieldState: { error } }) => (
-				<Form.Item label={label} style={{ marginBottom: '10px' }}>
+				<Form.Item label={label} style={{ marginBottom: '10px', width: '100%' }}>
 					<Select style={{ width: '100%' }} {...field} options={options} placeholder={`Select ${name}`} size='large' />
 					{error && (
 						<small style={{ color: 'red', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>

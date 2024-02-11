@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const academicSemesterSchema = z.object({
 	code: z.string({
-		required_error: 'Please select a semester Name'
+		required_error: 'Please select a semester name'
 	}),
 	year: z.string({
 		required_error: 'Please select a year'

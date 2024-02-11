@@ -32,21 +32,37 @@ const CreateAcademicSemester = () => {
 
 		try {
 			const res = await addAcademicSemester(semesterData);
-			// toast.success(res?.data?.message || 'Semester created successfully');
+
+			if (res?.data?.message) {
+				toast.success(res?.data?.message);
+			} else {
+				toast.error(res?.error?.data?.message);
+			}
 		} catch (error) {
 			console.log('error:', error);
-			// toast.error(error?.data?.message || 'Something went wrong!');
+			toast.error(error?.message);
 		}
 	};
 
 	return (
 		<Flex justify='center' align='center'>
-			<Col span={8}>
+			<Col span={12}>
+				<h1
+					style={{
+						marginBottom: '20px'
+					}}
+				>
+					Create Academic Semester
+				</h1>
 				<PHForm onSubmit={onSubmit} resolver={zodResolver(academicSemesterSchema)}>
-					<PHSelect label='Semester' options={semesterOptions} name='code' />
-					<PHSelect label='Year' options={yearOptions} name='year' />
-					<PHSelect label='Start Month' options={monthNamesOptions} name='startMonth' />
-					<PHSelect label='End Month' options={monthNamesOptions} name='endMonth' />
+					<Flex justify='space-between' gap={10} align='center'>
+						<PHSelect label='Semester' options={semesterOptions} name='code' />
+						<PHSelect label='Year' options={yearOptions} name='year' />
+					</Flex>
+					<Flex justify='space-between' gap={10} align='center'>
+						<PHSelect label='Start Month' options={monthNamesOptions} name='startMonth' />
+						<PHSelect label='End Month' options={monthNamesOptions} name='endMonth' />
+					</Flex>
 
 					<Button block type='primary' htmlType='submit' disabled={isLoading}>
 						{isLoading ? <Spin /> : 'Create'}
