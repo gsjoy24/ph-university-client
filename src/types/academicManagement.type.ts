@@ -15,4 +15,10 @@ export type TAcademicFaculty = {
 	updatedAt?: string;
 };
 
+export type TAcademicDepartment = {
+	name: string;
+	createdAt?: string;
+	updatedAt?: string;
+};
+
 export default TAcademicSemester;

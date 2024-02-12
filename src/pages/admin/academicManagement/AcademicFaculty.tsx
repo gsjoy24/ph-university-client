@@ -49,12 +49,12 @@ const column = [
 ];
 
 const AcademicFaculty = () => {
-	const { data } = useGetAllAcademicFacultiesQuery(null);
+	const { data, isFetching } = useGetAllAcademicFacultiesQuery(null);
 	const tableData = data?.data || [];
 
 	return (
 		<div>
-			<Table columns={column} dataSource={tableData} />
+			<Table loading={isFetching} columns={column} dataSource={tableData} />
 		</div>
 	);
 };

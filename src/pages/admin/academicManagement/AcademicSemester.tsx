@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
 import { TAcademicSemester } from '../../../types';
+import formatDate from '../../../utils/formatDate';
 
-type TDataType = Pick<TAcademicSemester, 'name' | 'year' | 'startMonth' | 'endMonth'>;
+type TDataType = Pick<TAcademicSemester, 'name' | 'year' | 'startMonth' | 'endMonth' | 'createdAt'>;
 
 type FilterValue = {
 	name: string;
@@ -70,6 +71,13 @@ const columns: TableColumnsType<TDataType> = [
 		dataIndex: 'endMonth'
 	},
 	{
+		title: 'Created At',
+		dataIndex: 'createdAt',
+		render(text: string) {
+			return <p>{formatDate(text)}</p>;
+		}
+	},
+	{
 		title: 'Action',
 		key: 'action',
 		render: () => (
@@ -109,13 +117,14 @@ const AcademicSemester = () => {
 		allSemesters && allSemesters.data
 			? allSemesters.data
 					.filter(({ _id }) => _id !== undefined)
-					.map(({ _id, name, startMonth, endMonth, year }) => {
+					.map(({ _id, name, startMonth, endMonth, year, createdAt }) => {
 						return {
 							key: _id,
 							name,
 							startMonth,
 							endMonth,
-							year
+							year,
+							createdAt
 						};
 					})
 			: [];

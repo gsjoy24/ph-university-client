@@ -17,7 +17,17 @@ export const academicSemesterSchema = z.object({
 
 export const academicFacultySchema = z.object({
 	name: z.string({
-		required_error: 'Please enter a faculty academic faculty!',
+		required_error: 'Please enter a faculty name!',
 		invalid_type_error: 'Enter a valid name!'
+	})
+});
+
+export const academicDepartmentSchema = z.object({
+	name: z.string({
+		required_error: 'Please enter a department name!',
+		invalid_type_error: 'Enter a valid name!'
+	}),
+	academicFaculty: z.string({
+		required_error: 'Please select an academic faculty!'
 	})
 });
