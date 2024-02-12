@@ -14,3 +14,10 @@ export const academicSemesterSchema = z.object({
 		required_error: 'Please select a end month'
 	})
 });
+
+export const academicFacultySchema = z.object({
+	name: z.string({
+		required_error: 'Please enter a faculty academic faculty!',
+		invalid_type_error: 'Enter a valid name!'
+	})
+});
