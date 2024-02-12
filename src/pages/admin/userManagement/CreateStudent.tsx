@@ -5,6 +5,8 @@ import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
 import PHSelect from '../../../components/form/PHSelect';
 import { bloodGroupOptions, genderOptions } from '../../../constants/global';
+import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
+
 const defaultValues = {
 	name: {
 		firstName: 'Daniel',
@@ -38,6 +40,11 @@ const defaultValues = {
 };
 
 const CreateStudent = () => {
+	const { data: semesterData, isLoading } = useGetAllSemestersQuery(null);
+	const semesterOptions = semesterData?.data?.map((semester) => ({
+		label: `${semester.name} - ${semester.year}`,
+		value: semester._id
+	}));
 	const onsSubmit = (values: any) => {
 		console.log(values);
 	};
@@ -62,6 +69,7 @@ const CreateStudent = () => {
 							<PHInput type='text' name='name.lastName' placeholder='last name' />
 						</Col>
 					</Row>
+
 					{/* gender, blood group and date of birth */}
 					<Row gutter={10} align={'top'}>
 						<Col span={8}>
@@ -74,6 +82,7 @@ const CreateStudent = () => {
 							<PHDatePicker label='Date Of Birth' name='dateOfBirth' />
 						</Col>
 					</Row>
+
 					{/* contact info */}
 					<Divider>Contact Information</Divider>
 					<Row gutter={10} align={'top'}>
