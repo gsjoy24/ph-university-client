@@ -1,4 +1,5 @@
-import { Button, Col, Divider, Flex, Row } from 'antd';
+import { Button, Col, Divider, Flex, Row, Spin } from 'antd';
+import { FieldValues, SubmitHandler } from 'react-hook-form';
 import PHTitle from '../../../components/PHTitle';
 import PHDatePicker from '../../../components/form/PHDatePicker';
 import PHForm from '../../../components/form/PHForm';
@@ -9,6 +10,7 @@ import {
 	useGetAllAcademicDepartmentsQuery,
 	useGetAllSemestersQuery
 } from '../../../redux/features/admin/academicManagement.api';
+import { useAddStudentMutation } from '../../../redux/features/admin/userManagement.api';
 
 const defaultValues = {
 	name: {
@@ -39,7 +41,9 @@ const defaultValues = {
 		occupation: 'Artist',
 		contactNo: '6667778888',
 		address: '890 Oak Street'
-	}
+	},
+	admissionSemester: '65ca2216e7502d6ff719e512',
+	academicDepartment: '65ca2e3f399c5c885bd8ee64'
 };
 
 const CreateStudent = () => {
@@ -48,14 +52,29 @@ const CreateStudent = () => {
 		label: `${semester?.name} - ${semester?.year}`,
 		value: semester?._id
 	}));
+
 	const { data: DData, isLoading: DisLoading } = useGetAllAcademicDepartmentsQuery(null);
 	const departmentOptions = DData?.data?.map((department) => ({
 		label: department?.name,
 		value: department?._id
 	}));
 
-	const onsSubmit = (values: any) => {
-		console.log(values);
+	// handle form submission
+	const [addStudent, { isLoading }] = useAddStudentMutation();
+	const onsSubmit: SubmitHandler<FieldValues> = async (values) => {
+		const formData = new FormData();
+		const modifiedData = {
+			password: 'password123',
+			studentData: values
+		};
+
+		formData.append('data', JSON.stringify(modifiedData));
+		try {
+			const res = await addStudent(formData);
+			console.log(res);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 	return (
 		<Row justify='center'>
@@ -65,17 +84,17 @@ const CreateStudent = () => {
 					<Divider>Personal Information</Divider>
 					{/* name */}
 					<Row gutter={10} align={'bottom'}>
-						{' '}
 						<Col span={8}>
 							<PHInput type='text' label='Student Name' name='name.firstName' placeholder='first name' />
 						</Col>
 						<Col span={8}>
-							{' '}
 							<PHInput type='text' name='name.middleName' placeholder='middle name' />
 						</Col>
 						<Col span={8}>
-							{' '}
 							<PHInput type='text' name='name.lastName' placeholder='last name' />
+						</Col>
+						<Col span={8}>
+							<PHInput type='file' name='image' label='Image' />
 						</Col>
 					</Row>
 
@@ -180,8 +199,8 @@ const CreateStudent = () => {
 						</Col>
 					</Row>
 
-					<Button type='primary' htmlType='submit' block>
-						Submit
+					<Button type='primary' htmlType='submit' block disabled={isLoading}>
+						{isLoading ? <Spin /> : 'Create Student'}
 					</Button>
 				</PHForm>
 			</Col>

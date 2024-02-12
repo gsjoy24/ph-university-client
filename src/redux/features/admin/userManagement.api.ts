@@ -3,10 +3,10 @@ import { baseApi } from '../../api/baseApi';
 const userManagementApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
 		addStudent: builder.mutation({
-			query: (student) => ({
+			query: (data) => ({
 				url: '/users/create-student',
 				method: 'POST',
-				body: student
+				body: data
 			})
 		})
 	})
