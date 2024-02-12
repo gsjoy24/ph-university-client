@@ -12,6 +12,12 @@ type FilterValue = {
 };
 const columns: TableColumnsType<TDataType> = [
 	{
+		title: 'Index',
+		render(_text: string, _record: any, index: number) {
+			return <div>{index + 1}</div>;
+		}
+	},
+	{
 		title: 'Name',
 		dataIndex: 'name',
 		filters: [
@@ -67,13 +73,9 @@ const columns: TableColumnsType<TDataType> = [
 		title: 'Action',
 		key: 'action',
 		render: () => (
-			<Flex>
-				<Button type='text' size='small'>
-					<AiOutlineEdit size={20} />
-				</Button>
-				<Button type='text' size='small'>
-					<AiOutlineDelete size={18} />
-				</Button>
+			<Flex gap={5}>
+				<Button type='primary' icon={<AiOutlineEdit />} />
+				<Button type='primary' danger icon={<AiOutlineDelete />} />
 			</Flex>
 		)
 	}
