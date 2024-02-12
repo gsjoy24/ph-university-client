@@ -5,7 +5,10 @@ import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
 import PHSelect from '../../../components/form/PHSelect';
 import { bloodGroupOptions, genderOptions } from '../../../constants/global';
-import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
+import {
+	useGetAllAcademicDepartmentsQuery,
+	useGetAllSemestersQuery
+} from '../../../redux/features/admin/academicManagement.api';
 
 const defaultValues = {
 	name: {
@@ -40,11 +43,17 @@ const defaultValues = {
 };
 
 const CreateStudent = () => {
-	const { data: semesterData, isLoading } = useGetAllSemestersQuery(null);
-	const semesterOptions = semesterData?.data?.map((semester) => ({
+	const { data: SData, isLoading: SisLoading } = useGetAllSemestersQuery(null);
+	const semesterOptions = SData?.data?.map((semester) => ({
 		label: `${semester.name} - ${semester.year}`,
 		value: semester._id
 	}));
+	const { data: DData, isLoading: DisLoading } = useGetAllAcademicDepartmentsQuery(null);
+	const departmentOptions = DData?.data?.map((department) => ({
+		label: department.name,
+		value: department._id
+	}));
+
 	const onsSubmit = (values: any) => {
 		console.log(values);
 	};
@@ -152,6 +161,22 @@ const CreateStudent = () => {
 						</Col>
 						<Col span={12}>
 							<PHInput type='text' label='Address' name='localGuardian.address' />
+						</Col>
+					</Row>
+
+					{/* academic info */}
+					<Divider>Academic Information</Divider>
+					<Row gutter={10} align={'top'}>
+						<Col span={12}>
+							<PHSelect disabled={SisLoading} label='Semester' name='admissionSemester' options={semesterOptions} />
+						</Col>
+						<Col span={12}>
+							<PHSelect
+								disabled={DisLoading}
+								label='Department'
+								name='academicDepartment'
+								options={departmentOptions}
+							/>
 						</Col>
 					</Row>
 
