@@ -7,16 +7,24 @@ type TInputProps = {
 	type: string;
 	label?: string;
 	defaultValue?: string;
+	placeholder?: string;
 };
 
-const PHInput = ({ name, type, label, defaultValue }: TInputProps) => {
+const PHInput = ({ name, type, label, defaultValue, placeholder }: TInputProps) => {
 	return (
 		<div>
 			<Controller
 				name={name}
 				render={({ field, fieldState: { error } }) => (
 					<Form.Item label={label}>
-						<Input {...field} type={type} id={name} placeholder={name} size='large' defaultValue={defaultValue} />
+						<Input
+							{...field}
+							type={type}
+							id={name}
+							placeholder={placeholder || name}
+							size='large'
+							defaultValue={defaultValue}
+						/>
 						{error && (
 							<small style={{ color: 'red', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
 								<MdErrorOutline size={14} />

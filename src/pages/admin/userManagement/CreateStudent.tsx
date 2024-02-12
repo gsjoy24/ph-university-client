@@ -1,6 +1,9 @@
-import { Button, Col, Flex } from 'antd';
+import { Button, Col, Divider, Flex } from 'antd';
+import PHTitle from '../../../components/PHTitle';
 import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
+import PHSelect from '../../../components/form/PHSelect';
+import { bloodGroupOptions, genderOptions } from '../../../constants/global';
 
 const CreateStudent = () => {
 	const onsSubmit = (values: any) => {
@@ -8,40 +11,22 @@ const CreateStudent = () => {
 	};
 	return (
 		<Flex justify='center'>
-			<Col span={14}>
-				<h1
-					style={{
-						marginBottom: '10px',
-						padding: '5px 0',
-						fontSize: '1.5rem',
-						width: '100%',
-						textAlign: 'center',
-						background: '#001529',
-						color: 'white'
-					}}
-				>
-					Create Student
-				</h1>
+			<Col span={18}>
+				<PHTitle title='Create Student' />
 				<PHForm onSubmit={onsSubmit}>
+					<Divider>Personal Information</Divider>
 					{/* name */}
+					<Flex align='end' justify='space-between' gap={10}>
+						<PHInput type='text' label='Student Name' name='name.firstName' placeholder='first name' />
+						<PHInput type='text' name='name.middleName' placeholder='middle name' />
+						<PHInput type='text' name='name.lastName' placeholder='last name' />
+					</Flex>
 					<Flex align='end' gap={10}>
-						<PHInput type='text' label='Student Name' name='firstName' />
-						<PHInput type='text' name='middleName' />
-						<PHInput type='text' name='lastName' />
+						<PHSelect label='Gender' name='gender' options={genderOptions} />
+						<PHSelect label='Blood Group' name='bloodGroup' options={bloodGroupOptions} />
 					</Flex>
 
-					{/* email */}
-					<PHInput type='email' label='Email' name='email' />
-
-					{/* password */}
-					<PHInput type='password' label='Password' name='password' />
-
-					{/* confirm password */}
-					<PHInput type='password' label='Confirm Password' name='confirmPassword' />
-
-					{/* submit */}
-
-					<Button type='primary' htmlType='submit'>
+					<Button type='primary' htmlType='submit' block>
 						Submit
 					</Button>
 				</PHForm>
