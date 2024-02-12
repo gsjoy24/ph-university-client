@@ -129,7 +129,18 @@ const AcademicSemester = () => {
 					})
 			: [];
 
-	return <Table loading={isFetching} columns={columns} dataSource={tableData} onChange={onChange} />;
+	return (
+		<>
+			<h1
+				style={{
+					marginBottom: '20px'
+				}}
+			>
+				All Academic Semesters
+			</h1>
+			<Table loading={isFetching} columns={columns} dataSource={tableData} onChange={onChange} />
+		</>
+	);
 };
 
 export default AcademicSemester;

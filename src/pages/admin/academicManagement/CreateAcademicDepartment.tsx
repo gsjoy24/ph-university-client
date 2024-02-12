@@ -22,8 +22,6 @@ const CreateAcademicDepartment = () => {
 
 	const [AddAcademicDepartment, { isLoading }] = useAddAcademicDepartmentMutation();
 	const onSubmit = async (data: FieldValues) => {
-		console.log('asdf');
-		console.log(data);
 		try {
 			const res = (await AddAcademicDepartment(data)) as TResponse<TAcademicDepartment>;
 

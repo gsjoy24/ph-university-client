@@ -1,10 +1,7 @@
 import { Button, Flex, Table } from 'antd';
-import { FilterDropdownProps } from 'antd/es/table/interface';
-import { useState } from 'react';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
-import { useGetAllAcademicFacultiesQuery } from '../../../redux/features/admin/academicManagement.api';
+import { useGetAllAcademicDepartmentsQuery } from '../../../redux/features/admin/academicManagement.api';
 import formatDate from '../../../utils/formatDate';
-
 const column = [
 	{
 		title: 'Index',
@@ -14,21 +11,7 @@ const column = [
 	},
 	{
 		title: 'Name',
-		dataIndex: 'name',
-		filters: [
-			{
-				text: 'Autumn',
-				value: 'Autumn'
-			},
-			{
-				text: 'Fall',
-				value: 'Fall'
-			},
-			{
-				text: 'Summer',
-				value: 'Summer'
-			}
-		]
+		dataIndex: 'name'
 	},
 	{
 		title: 'Created At',
@@ -48,8 +31,8 @@ const column = [
 	}
 ];
 
-const AcademicFaculty = () => {
-	const { data, isFetching } = useGetAllAcademicFacultiesQuery(null);
+const AcademicDepartment = () => {
+	const { data, isFetching } = useGetAllAcademicDepartmentsQuery(null);
 	const tableData = data?.data || [];
 
 	return (
@@ -59,11 +42,12 @@ const AcademicFaculty = () => {
 					marginBottom: '20px'
 				}}
 			>
-				All Academic Faculties
+				All Academic Departments
 			</h1>
+
 			<Table loading={isFetching} columns={column} dataSource={tableData} />
 		</>
 	);
 };
 
-export default AcademicFaculty;
+export default AcademicDepartment;
