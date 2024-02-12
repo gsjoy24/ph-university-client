@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Col, Flex, Spin } from 'antd';
 import { FieldValues } from 'react-hook-form';
+import { toast } from 'sonner';
 import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
 import PHSelect from '../../../components/form/PHSelect';
@@ -9,37 +10,32 @@ import {
 	useGetAllAcademicFacultiesQuery
 } from '../../../redux/features/admin/academicManagement.api';
 import { academicDepartmentSchema } from '../../../schemas/academicManagement.schema';
+import { TAcademicDepartment, TResponse } from '../../../types';
 
 const CreateAcademicDepartment = () => {
 	const { data: academicFaculties, isFetching } = useGetAllAcademicFacultiesQuery(null);
-	const facultyOptions = academicFaculties?.data
-		?.map(({ _id, name }) => {
-			if (!_id || !name) {
-				return null;
-			}
-			return {
-				label: name,
-				value: _id
-			};
-		})
-		.filter(Boolean);
+
+	const facultyOptions = academicFaculties?.data?.map(({ _id, name }) => ({
+		label: name,
+		value: _id
+	}));
 
 	const [AddAcademicDepartment, { isLoading }] = useAddAcademicDepartmentMutation();
 	const onSubmit = async (data: FieldValues) => {
 		console.log('asdf');
 		console.log(data);
-		// try {
-		// 	const res = (await AddAcademicDepartment(data)) as TResponse<TAcademicDepartment>;
+		try {
+			const res = (await AddAcademicDepartment(data)) as TResponse<TAcademicDepartment>;
 
-		// 	if (res?.data?.message) {
-		// 		toast.success(res?.data?.message);
-		// 	} else {
-		// 		toast.error(res?.error?.data?.message);
-		// 	}
-		// } catch (error) {
-		// 	console.log('error:', error);
-		// 	toast.error('Something went wrong');
-		// }
+			if (res?.data?.message) {
+				toast.success(res?.data?.message);
+			} else {
+				toast.error(res?.error?.data?.message);
+			}
+		} catch (error) {
+			console.log('error:', error);
+			toast.error('Something went wrong');
+		}
 	};
 
 	return (
