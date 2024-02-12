@@ -5,7 +5,7 @@ import { MdErrorOutline } from 'react-icons/md';
 type TInputProps = {
 	name: string;
 	type: string;
-	label: string;
+	label?: string;
 	defaultValue?: string;
 };
 
