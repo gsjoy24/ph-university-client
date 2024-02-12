@@ -45,13 +45,13 @@ const defaultValues = {
 const CreateStudent = () => {
 	const { data: SData, isLoading: SisLoading } = useGetAllSemestersQuery(null);
 	const semesterOptions = SData?.data?.map((semester) => ({
-		label: `${semester.name} - ${semester.year}`,
-		value: semester._id
+		label: `${semester?.name} - ${semester?.year}`,
+		value: semester?._id
 	}));
 	const { data: DData, isLoading: DisLoading } = useGetAllAcademicDepartmentsQuery(null);
 	const departmentOptions = DData?.data?.map((department) => ({
-		label: department.name,
-		value: department._id
+		label: department?.name,
+		value: department?._id
 	}));
 
 	const onsSubmit = (values: any) => {
