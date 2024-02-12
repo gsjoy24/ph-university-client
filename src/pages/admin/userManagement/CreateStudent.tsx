@@ -1,5 +1,6 @@
-import { Button, Col, Divider, Flex } from 'antd';
+import { Button, Col, Divider, Flex, Row } from 'antd';
 import PHTitle from '../../../components/PHTitle';
+import PHDatePicker from '../../../components/form/PHDatePicker';
 import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
 import PHSelect from '../../../components/form/PHSelect';
@@ -10,28 +11,48 @@ const CreateStudent = () => {
 		console.log(values);
 	};
 	return (
-		<Flex justify='center'>
-			<Col span={18}>
+		<Row justify='center'>
+			<Col span={24}>
 				<PHTitle title='Create Student' />
 				<PHForm onSubmit={onsSubmit}>
 					<Divider>Personal Information</Divider>
+
 					{/* name */}
-					<Flex align='end' justify='space-between' gap={10}>
-						<PHInput type='text' label='Student Name' name='name.firstName' placeholder='first name' />
-						<PHInput type='text' name='name.middleName' placeholder='middle name' />
-						<PHInput type='text' name='name.lastName' placeholder='last name' />
-					</Flex>
-					<Flex align='end' gap={10}>
-						<PHSelect label='Gender' name='gender' options={genderOptions} />
-						<PHSelect label='Blood Group' name='bloodGroup' options={bloodGroupOptions} />
-					</Flex>
+					<Row gutter={10} align={'bottom'}>
+						{' '}
+						<Col span={8}>
+							<PHInput type='text' label='Student Name' name='name.firstName' placeholder='first name' />
+						</Col>
+						<Col span={8}>
+							{' '}
+							<PHInput type='text' name='name.middleName' placeholder='middle name' />
+						</Col>
+						<Col span={8}>
+							{' '}
+							<PHInput type='text' name='name.lastName' placeholder='last name' />
+						</Col>
+					</Row>
+
+					{/* gender, blood group and date of birth */}
+					<Row gutter={10} align={'top'}>
+						<Col span={8}>
+							{' '}
+							<PHSelect label='Gender' name='gender' options={genderOptions} />
+						</Col>
+						<Col span={8}>
+							<PHSelect label='Blood Group' name='bloodGroup' options={bloodGroupOptions} />
+						</Col>
+						<Col span={8}>
+							<PHDatePicker label='Date of birth' name='dateOfBirth' />
+						</Col>
+					</Row>
 
 					<Button type='primary' htmlType='submit' block>
 						Submit
 					</Button>
 				</PHForm>
 			</Col>
-		</Flex>
+		</Row>
 	);
 };
 

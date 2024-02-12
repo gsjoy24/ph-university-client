@@ -1,31 +1,21 @@
-import { Form, Input } from 'antd';
+import { DatePicker, Form } from 'antd';
 import { Controller } from 'react-hook-form';
 import { MdErrorOutline } from 'react-icons/md';
 
-type TInputProps = {
+type TDatePickerProps = {
 	name: string;
-	type: string;
 	label?: string;
-	defaultValue?: string;
 	placeholder?: string;
 };
 
-const PHInput = ({ name, type, label, defaultValue, placeholder }: TInputProps) => {
+const PHDatePicker = ({ name, label, placeholder }: TDatePickerProps) => {
 	return (
 		<div>
 			<Controller
 				name={name}
 				render={({ field, fieldState: { error } }) => (
 					<Form.Item label={label}>
-						<Input
-							{...field}
-							type={type}
-							id={name}
-							placeholder={placeholder || name}
-							size='large'
-							defaultValue={defaultValue}
-							style={{ width: '100%' }}
-						/>
+						<DatePicker {...field} id={name} placeholder={placeholder || name} size='large' style={{ width: '100%' }} />
 						{error && (
 							<small style={{ color: 'red', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
 								<MdErrorOutline size={14} />
@@ -39,4 +29,4 @@ const PHInput = ({ name, type, label, defaultValue, placeholder }: TInputProps) 
 	);
 };
 
-export default PHInput;
+export default PHDatePicker;
