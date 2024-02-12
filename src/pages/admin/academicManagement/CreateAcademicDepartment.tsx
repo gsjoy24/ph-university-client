@@ -3,12 +3,30 @@ import { Button, Col, Flex, Spin } from 'antd';
 import { FieldValues } from 'react-hook-form';
 import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
-import { useAddAcademicDepartmentMutation } from '../../../redux/features/admin/academicManagement.api';
+import PHSelect from '../../../components/form/PHSelect';
+import {
+	useAddAcademicDepartmentMutation,
+	useGetAllAcademicFacultiesQuery
+} from '../../../redux/features/admin/academicManagement.api';
 import { academicDepartmentSchema } from '../../../schemas/academicManagement.schema';
 
 const CreateAcademicDepartment = () => {
+	const { data: academicFaculties, isFetching } = useGetAllAcademicFacultiesQuery(null);
+	const facultyOptions = academicFaculties?.data
+		?.map(({ _id, name }) => {
+			if (!_id || !name) {
+				return null;
+			}
+			return {
+				label: name,
+				value: _id
+			};
+		})
+		.filter(Boolean);
+
 	const [AddAcademicDepartment, { isLoading }] = useAddAcademicDepartmentMutation();
 	const onSubmit = async (data: FieldValues) => {
+		console.log('asdf');
 		console.log(data);
 		// try {
 		// 	const res = (await AddAcademicDepartment(data)) as TResponse<TAcademicDepartment>;
@@ -26,14 +44,13 @@ const CreateAcademicDepartment = () => {
 
 	return (
 		<Flex justify='center' align='center' style={{ minHeight: '85vh' }}>
-			<Col span={10}>
-				<h1 style={{ marginBottom: '15px' }}>Create new academic faculty</h1>
+			<Col span={12}>
+				<h1 style={{ marginBottom: '15px' }}>Create new academic department</h1>
 				<PHForm onSubmit={onSubmit} resolver={zodResolver(academicDepartmentSchema)}>
-					{/* <PHInput type='text' label='Academic Faculty Name' name='name' defaultValue='Faculty of ' /> */}
+					<PHInput type='text' label='Academic Department Name' name='name' defaultValue='Department of ' />
+					<PHSelect options={facultyOptions} label='Academic faculty' name='academicFaculty' />
 
-					<PHInput type='text' label='Academic Department Name' name='name' />
-
-					<Button type='primary' htmlType='submit' disabled={isLoading} block>
+					<Button type='primary' htmlType='submit' disabled={isLoading && isFetching} block>
 						{isLoading ? <Spin /> : 'Create'}
 					</Button>
 				</PHForm>

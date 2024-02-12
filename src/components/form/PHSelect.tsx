@@ -5,7 +5,7 @@ import { MdErrorOutline } from 'react-icons/md';
 type TPHSelectProps = {
 	label: string;
 	name: string;
-	options: { value: string; label: string; disabled?: boolean }[];
+	options?: { value: string; label: string; disabled?: boolean }[];
 };
 
 const PHSelect = ({ label, name, options }: TPHSelectProps) => {
@@ -14,7 +14,7 @@ const PHSelect = ({ label, name, options }: TPHSelectProps) => {
 			name={name}
 			render={({ field, fieldState: { error } }) => (
 				<Form.Item label={label} style={{ marginBottom: '10px', width: '100%' }}>
-					<Select style={{ width: '100%' }} {...field} options={options} placeholder={`Select ${name}`} size='large' />
+					<Select style={{ width: '100%' }} {...field} options={options} placeholder={`Select ${label}`} size='large' />
 					{error && (
 						<small style={{ color: 'red', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
 							<MdErrorOutline size={14} />
