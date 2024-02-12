@@ -79,6 +79,7 @@ const academicManagementApi = baseApi.injectEndpoints({
 				};
 			}
 		}),
+
 		addAcademicDepartment: builder.mutation({
 			query: (data) => ({
 				url: '/academic-departments',
