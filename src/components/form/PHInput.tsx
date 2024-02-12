@@ -21,7 +21,7 @@ const PHInput = ({ name, type, label, defaultValue, placeholder }: TInputProps) 
 							{...field}
 							type={type}
 							id={name}
-							placeholder={placeholder || name}
+							placeholder={placeholder || label}
 							size='large'
 							defaultValue={defaultValue}
 							style={{ width: '100%' }}

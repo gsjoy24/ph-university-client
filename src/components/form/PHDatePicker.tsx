@@ -15,7 +15,7 @@ const PHDatePicker = ({ name, label, placeholder }: TDatePickerProps) => {
 				name={name}
 				render={({ field, fieldState: { error } }) => (
 					<Form.Item label={label}>
-						<DatePicker {...field} id={name} placeholder={placeholder || name} size='large' style={{ width: '100%' }} />
+						<DatePicker {...field} id={name} placeholder={`Select ${label}`} size='large' style={{ width: '100%' }} />
 						{error && (
 							<small style={{ color: 'red', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
 								<MdErrorOutline size={14} />
