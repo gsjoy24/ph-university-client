@@ -1,6 +1,7 @@
 import { Button, Flex, Pagination, Table, TableColumnsType } from 'antd';
 import { useState } from 'react';
 import { AiOutlineEdit, AiOutlineEye, AiOutlineStop } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 import { useGetAllStudentsQuery } from '../../../redux/features/admin/userManagement.api';
 import { TMeta, TQueryParams, TStudent } from '../../../types';
 import formatDate from '../../../utils/formatDate';
@@ -40,9 +41,11 @@ const columns: TableColumnsType<TDataType> = [
 	{
 		title: 'Action',
 		key: 'action',
-		render: () => (
+		render: (item) => (
 			<Flex gap={5}>
-				<Button type='dashed' icon={<AiOutlineEye />} />
+				<Link to={`/admin/student-details/${item.key}`}>
+					<Button type='dashed' icon={<AiOutlineEye />} />
+				</Link>
 				<Button type='dashed' icon={<AiOutlineEdit />} />
 				<Button type='dashed' danger icon={<AiOutlineStop />} />
 			</Flex>
