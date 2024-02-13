@@ -2,15 +2,11 @@ import { Button, Flex, Table, TableColumnsType, TableProps } from 'antd';
 import React, { useState } from 'react';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
-import { TAcademicSemester } from '../../../types';
+import { TAcademicSemester, TQueryParams } from '../../../types';
 import formatDate from '../../../utils/formatDate';
 
 type TDataType = Pick<TAcademicSemester, 'name' | 'year' | 'startMonth' | 'endMonth' | 'createdAt'>;
 
-type FilterValue = {
-	name: string;
-	value: string;
-};
 const columns: TableColumnsType<TDataType> = [
 	{
 		title: 'Index',
@@ -90,12 +86,12 @@ const columns: TableColumnsType<TDataType> = [
 ];
 
 const AcademicSemester = () => {
-	const [params, setParams] = useState([] as FilterValue[]);
+	const [params, setParams] = useState([] as TQueryParams[]);
 	const { data: allSemesters, isFetching } = useGetAllSemestersQuery(params);
 
 	const onChange: TableProps<TDataType>['onChange'] = (pagination, filters, sorter, extra) => {
 		if (extra.action === 'filter') {
-			const queryArray: FilterValue[] = [];
+			const queryArray: TQueryParams[] = [];
 			filters.name?.forEach((item) =>
 				queryArray.push({
 					name: 'name',

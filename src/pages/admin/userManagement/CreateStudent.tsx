@@ -1,5 +1,6 @@
 import { Button, Col, Divider, Flex, Form, Input, Row, Spin } from 'antd';
 import { Controller, FieldValues, SubmitHandler } from 'react-hook-form';
+import { toast } from 'sonner';
 import PHTitle from '../../../components/PHTitle';
 import PHDatePicker from '../../../components/form/PHDatePicker';
 import PHForm from '../../../components/form/PHForm';
@@ -11,39 +12,40 @@ import {
 	useGetAllSemestersQuery
 } from '../../../redux/features/admin/academicManagement.api';
 import { useAddStudentMutation } from '../../../redux/features/admin/userManagement.api';
+import { responsiveArray } from 'antd/es/_util/responsiveObserver';
 
-const defaultValues = {
-	name: {
-		firstName: 'Daniel',
-		middleName: 'Thomas',
-		lastName: 'Wilson'
-	},
-	gender: 'male',
-	bloodGroup: 'B-',
+// const defaultValues = {
+// 	name: {
+// 		firstName: 'Daniel',
+// 		middleName: 'Thomas',
+// 		lastName: 'Wilson'
+// 	},
+// 	gender: 'male',
+// 	bloodGroup: 'B-',
 
-	email: 'danssiel.wdqilsojn@exsample.com',
-	contactNo: '55566677277',
-	emergencyContactNo: '88899902000',
-	presentAddress: '234 Elm Street',
-	permanentAddress: '567 Maple Avenue',
+// 	email: 'danssiel.wdqilsojn@exsample.com',
+// 	contactNo: '55566677277',
+// 	emergencyContactNo: '88899902000',
+// 	presentAddress: '234 Elm Street',
+// 	permanentAddress: '567 Maple Avenue',
 
-	guardian: {
-		fatherName: 'James Wilson',
-		fatherOccupation: 'Professor',
-		fatherContactNo: '3334445555',
-		motherName: 'Emma Wilson',
-		motherOccupation: 'Engineer',
-		motherContactNo: '3332221111'
-	},
-	localGuardian: {
-		name: 'Sophie Adams',
-		occupation: 'Artist',
-		contactNo: '6667778888',
-		address: '890 Oak Street'
-	},
-	admissionSemester: '65ca2216e7502d6ff719e512',
-	academicDepartment: '65ca2e3f399c5c885bd8ee64'
-};
+// 	guardian: {
+// 		fatherName: 'James Wilson',
+// 		fatherOccupation: 'Professor',
+// 		fatherContactNo: '3334445555',
+// 		motherName: 'Emma Wilson',
+// 		motherOccupation: 'Engineer',
+// 		motherContactNo: '3332221111'
+// 	},
+// 	localGuardian: {
+// 		name: 'Sophie Adams',
+// 		occupation: 'Artist',
+// 		contactNo: '6667778888',
+// 		address: '890 Oak Street'
+// 	},
+// 	admissionSemester: '65ca2216e7502d6ff719e512',
+// 	academicDepartment: '65ca2e3f399c5c885bd8ee64'
+// };
 
 const CreateStudent = () => {
 	const { data: SData, isLoading: SisLoading } = useGetAllSemestersQuery(null);
@@ -72,7 +74,12 @@ const CreateStudent = () => {
 
 		try {
 			const res = await addStudent(formData);
-			console.log(res);
+			if (res?.data?.success) {
+				toast.success(res?.data?.message);
+			} else {
+				console.log(res);
+				toast.error(res?.error?.message);
+			}
 		} catch (error) {
 			console.log(error);
 		}
@@ -81,7 +88,7 @@ const CreateStudent = () => {
 		<Row justify='center'>
 			<Col span={24}>
 				<PHTitle title='Create Student' />
-				<PHForm onSubmit={onsSubmit} defaultValues={defaultValues}>
+				<PHForm onSubmit={onsSubmit}>
 					<Divider>Personal Information</Divider>
 					{/* name */}
 					<Row gutter={10} align={'bottom'}>

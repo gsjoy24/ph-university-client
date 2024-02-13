@@ -1,16 +1,12 @@
-import { Button, Flex, Table, TableColumnsType, TableProps } from 'antd';
-import React, { useState } from 'react';
-import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
-import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
-import { TAcademicSemester } from '../../../types';
+import { Button, Flex, Pagination, Table, TableColumnsType } from 'antd';
+import { useState } from 'react';
+import { AiOutlineEdit, AiOutlineEye, AiOutlineStop } from 'react-icons/ai';
+import { useGetAllStudentsQuery } from '../../../redux/features/admin/userManagement.api';
+import { TMeta, TQueryParams, TStudent } from '../../../types';
 import formatDate from '../../../utils/formatDate';
 
-type TDataType = Pick<TAcademicSemester, 'name' | 'year' | 'startMonth' | 'endMonth' | 'createdAt'>;
+type TDataType = Pick<TStudent, 'fullName' | 'createdAt'>;
 
-type FilterValue = {
-	name: string;
-	value: string;
-};
 const columns: TableColumnsType<TDataType> = [
 	{
 		title: 'Index',
@@ -20,55 +16,7 @@ const columns: TableColumnsType<TDataType> = [
 	},
 	{
 		title: 'Name',
-		dataIndex: 'name',
-		filters: [
-			{
-				text: 'Autumn',
-				value: 'Autumn'
-			},
-			{
-				text: 'Fall',
-				value: 'Fall'
-			},
-			{
-				text: 'Summer',
-				value: 'Summer'
-			}
-		]
-	},
-	{
-		title: 'Year',
-		dataIndex: 'year',
-		filters: [
-			{
-				text: '2024',
-				value: '2024'
-			},
-			{
-				text: '2025',
-				value: '2025'
-			},
-			{
-				text: '2026',
-				value: '2026'
-			},
-			{
-				text: '2027',
-				value: '2027'
-			},
-			{
-				text: '2028',
-				value: '2028'
-			}
-		]
-	},
-	{
-		title: 'Start Month',
-		dataIndex: 'startMonth'
-	},
-	{
-		title: 'End Month',
-		dataIndex: 'endMonth'
+		dataIndex: 'fullName'
 	},
 	{
 		title: 'Created At',
@@ -82,48 +30,34 @@ const columns: TableColumnsType<TDataType> = [
 		key: 'action',
 		render: () => (
 			<Flex gap={5}>
-				<Button type='primary' icon={<AiOutlineEdit />} />
-				<Button type='primary' danger icon={<AiOutlineDelete />} />
+				<Button type='dashed' icon={<AiOutlineEye />} />
+				<Button type='dashed' icon={<AiOutlineEdit />} />
+				<Button type='dashed' danger icon={<AiOutlineStop />} />
 			</Flex>
 		)
 	}
 ];
 
-const AcademicSemester = () => {
-	const [params, setParams] = useState([] as FilterValue[]);
-	const { data: allSemesters, isFetching } = useGetAllSemestersQuery(params);
+const Students = () => {
+	const [params, setParams] = useState<TQueryParams[]>([]);
+	const [page, setPage] = useState<number>(1);
 
-	const onChange: TableProps<TDataType>['onChange'] = (pagination, filters, sorter, extra) => {
-		if (extra.action === 'filter') {
-			const queryArray: FilterValue[] = [];
-			filters.name?.forEach((item) =>
-				queryArray.push({
-					name: 'name',
-					value: item as string
-				})
-			);
-			filters.year?.forEach((item) =>
-				queryArray.push({
-					name: 'year',
-					value: item as string
-				})
-			);
+	const { data: allStudents, isFetching } = useGetAllStudentsQuery([
+		{ name: 'limit', value: 3 },
+		{ name: 'sort', value: 'id' },
+		{ name: 'page', value: page }
+	]);
 
-			setParams(queryArray);
-		}
-	};
+	const metaData = allStudents?.meta as TMeta;
 
 	const tableData =
-		allSemesters && allSemesters.data
-			? allSemesters.data
+		allStudents && allStudents.data
+			? allStudents.data
 					.filter(({ _id }) => _id !== undefined)
-					.map(({ _id, name, startMonth, endMonth, year, createdAt }) => {
+					.map(({ _id, fullName, createdAt }) => {
 						return {
 							key: _id,
-							name,
-							startMonth,
-							endMonth,
-							year,
+							fullName,
 							createdAt
 						};
 					})
@@ -138,9 +72,10 @@ const AcademicSemester = () => {
 			>
 				All Academic Semesters
 			</h1>
-			<Table loading={isFetching} columns={columns} dataSource={tableData} onChange={onChange} />
+			<Table loading={isFetching} columns={columns} dataSource={tableData} pagination={false} />
+			<Pagination total={metaData?.total} pageSize={metaData?.limit} onChange={(value) => setPage(value)} />
 		</>
 	);
 };
 
-export default AcademicSemester;
+export default Students;

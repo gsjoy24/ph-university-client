@@ -1,5 +1,10 @@
 import { BaseQueryApi } from '@reduxjs/toolkit/query';
 
+export type TQueryParams = {
+	name: string;
+	value: string;
+};
+
 export type TError = {
 	status: number;
 	data: {
