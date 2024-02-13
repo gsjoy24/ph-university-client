@@ -5,7 +5,7 @@ import { useGetAllStudentsQuery } from '../../../redux/features/admin/userManage
 import { TMeta, TQueryParams, TStudent } from '../../../types';
 import formatDate from '../../../utils/formatDate';
 
-type TDataType = Pick<TStudent, 'fullName' | 'createdAt'>;
+type TDataType = Pick<TStudent, 'fullName' | 'id' | 'email' | 'contactNo' | 'createdAt'>;
 
 const columns: TableColumnsType<TDataType> = [
 	{
@@ -17,6 +17,18 @@ const columns: TableColumnsType<TDataType> = [
 	{
 		title: 'Name',
 		dataIndex: 'fullName'
+	},
+	{
+		title: 'Id',
+		dataIndex: 'id'
+	},
+	{
+		title: 'Contact No',
+		dataIndex: 'contactNo'
+	},
+	{
+		title: 'Email',
+		dataIndex: 'email'
 	},
 	{
 		title: 'Created At',
@@ -43,7 +55,7 @@ const Students = () => {
 	const [page, setPage] = useState<number>(1);
 
 	const { data: allStudents, isFetching } = useGetAllStudentsQuery([
-		{ name: 'limit', value: 3 },
+		{ name: 'limit', value: 5 },
 		{ name: 'sort', value: 'id' },
 		{ name: 'page', value: page }
 	]);
@@ -54,10 +66,13 @@ const Students = () => {
 		allStudents && allStudents.data
 			? allStudents.data
 					.filter(({ _id }) => _id !== undefined)
-					.map(({ _id, fullName, createdAt }) => {
+					.map(({ _id, fullName, createdAt, id, email, contactNo }) => {
 						return {
 							key: _id,
 							fullName,
+							id,
+							email,
+							contactNo,
 							createdAt
 						};
 					})
@@ -73,7 +88,14 @@ const Students = () => {
 				All Academic Semesters
 			</h1>
 			<Table loading={isFetching} columns={columns} dataSource={tableData} pagination={false} />
-			<Pagination total={metaData?.total} pageSize={metaData?.limit} onChange={(value) => setPage(value)} />
+			<Flex justify='center' style={{ marginTop: '20px' }}>
+				<Pagination
+					total={metaData?.total}
+					pageSize={metaData?.limit}
+					current={page}
+					onChange={(value) => setPage(value)}
+				/>
+			</Flex>
 		</>
 	);
 };
