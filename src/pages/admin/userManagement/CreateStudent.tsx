@@ -1,5 +1,5 @@
-import { Button, Col, Divider, Flex, Row, Spin } from 'antd';
-import { FieldValues, SubmitHandler } from 'react-hook-form';
+import { Button, Col, Divider, Flex, Form, Input, Row, Spin } from 'antd';
+import { Controller, FieldValues, SubmitHandler } from 'react-hook-form';
 import PHTitle from '../../../components/PHTitle';
 import PHDatePicker from '../../../components/form/PHDatePicker';
 import PHForm from '../../../components/form/PHForm';
@@ -19,7 +19,6 @@ const defaultValues = {
 		lastName: 'Wilson'
 	},
 	gender: 'male',
-
 	bloodGroup: 'B-',
 
 	email: 'danssiel.wdqilsojn@exsample.com',
@@ -69,6 +68,8 @@ const CreateStudent = () => {
 		};
 
 		formData.append('data', JSON.stringify(modifiedData));
+		formData.append('file', values.image);
+
 		try {
 			const res = await addStudent(formData);
 			console.log(res);
@@ -94,7 +95,19 @@ const CreateStudent = () => {
 							<PHInput type='text' name='name.lastName' placeholder='last name' />
 						</Col>
 						<Col span={8}>
-							<PHInput type='file' name='image' label='Image' />
+							<Controller
+								name='image'
+								render={({ field: { onChange, value, ...field } }) => (
+									<Form.Item label='Image'>
+										<Input
+											{...field}
+											value={value?.fileName}
+											type='file'
+											onChange={(e) => onChange(e.target.files?.[0])}
+										/>
+									</Form.Item>
+								)}
+							/>
 						</Col>
 					</Row>
 
