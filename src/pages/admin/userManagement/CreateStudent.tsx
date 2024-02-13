@@ -12,7 +12,6 @@ import {
 	useGetAllSemestersQuery
 } from '../../../redux/features/admin/academicManagement.api';
 import { useAddStudentMutation } from '../../../redux/features/admin/userManagement.api';
-import { responsiveArray } from 'antd/es/_util/responsiveObserver';
 
 // const defaultValues = {
 // 	name: {
