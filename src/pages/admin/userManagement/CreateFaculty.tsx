@@ -1,18 +1,163 @@
-import Title from 'antd/es/typography/Title';
+import { Button, Col, Divider, Form, Input, Row, Spin } from 'antd';
+import { Controller } from 'react-hook-form';
+import PHTitle from '../../../components/PHTitle';
+import PHDatePicker from '../../../components/form/PHDatePicker';
 import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
+import PHSelect from '../../../components/form/PHSelect';
+import { bloodGroupOptions, genderOptions } from '../../../constants/global';
+import { useGetAllAcademicDepartmentsQuery } from '../../../redux/features/admin/academicManagement.api';
 
 const CreateFaculty = () => {
+	const { data: DData, isLoading: DisLoading } = useGetAllAcademicDepartmentsQuery(null);
+	const departmentOptions = DData?.data?.map((department) => ({
+		label: department?.name,
+		value: department?._id
+	}));
 	const onsSubmit = (values: any) => {
 		console.log(values);
 	};
 	return (
-		<>
-			<Title level={2}>Create Faculty</Title>
-			<PHForm onSubmit={onsSubmit}>
-				<PHInput type='text' label='Student Name' name='facultyName' />
-			</PHForm>
-		</>
+		<Row justify='center'>
+			<Col span={24}>
+				<PHTitle title='Create Faculty' />
+				<PHForm onSubmit={onsSubmit}>
+					<Divider>Personal Information</Divider>
+					{/* name */}
+					<Row gutter={10} align={'bottom'}>
+						<Col span={8}>
+							<PHInput type='text' label='Student Name' name='name.firstName' placeholder='first name' />
+						</Col>
+						<Col span={8}>
+							<PHInput type='text' name='name.middleName' placeholder='middle name' />
+						</Col>
+						<Col span={8}>
+							<PHInput type='text' name='name.lastName' placeholder='last name' />
+						</Col>
+						<Col span={8}>
+							<Controller
+								name='image'
+								render={({ field: { onChange, value, ...field } }) => (
+									<Form.Item label='Image'>
+										<Input
+											{...field}
+											value={value?.fileName}
+											type='file'
+											onChange={(e) => onChange(e.target.files?.[0])}
+										/>
+									</Form.Item>
+								)}
+							/>
+						</Col>
+					</Row>
+
+					{/* gender, blood group and date of birth */}
+					<Row gutter={10} align={'top'}>
+						<Col span={8}>
+							<PHSelect label='Gender' name='gender' options={genderOptions} />
+						</Col>
+						<Col span={8}>
+							<PHSelect label='Blood Group' name='bloodGroup' options={bloodGroupOptions} />
+						</Col>
+						<Col span={8}>
+							<PHDatePicker label='Date Of Birth' name='dateOfBirth' />
+						</Col>
+					</Row>
+
+					{/* contact info */}
+					<Divider>Contact Information</Divider>
+					<Row gutter={10} align={'top'}>
+						<Col span={8}>
+							<PHInput type='text' label='Email Address' name='email' placeholder='example@gmail.com' />
+						</Col>
+						<Col span={8}>
+							<PHInput type='text' label='Contact No.' name='contactNo' placeholder='+8801xxxxxxxxx' />
+						</Col>
+						<Col span={8}>
+							<PHInput
+								type='text'
+								label='Emergency Contact No.'
+								name='emergencyContactNo'
+								placeholder='+8801xxxxxxxxx'
+							/>
+						</Col>
+					</Row>
+
+					{/* address */}
+					<Row gutter={10} align={'top'}>
+						<Col span={12}>
+							<PHInput type='text' label='Present Address' name='presentAddress' />
+						</Col>
+						<Col span={12}>
+							<PHInput type='text' label='Permanent Address' name='permanentAddress' />
+						</Col>
+					</Row>
+
+					{/* guardian info */}
+					<Divider>Guardian Information</Divider>
+					<Row gutter={10} align={'top'}>
+						<Col span={8}>
+							<PHInput type='text' label='Father Name' name='guardian.fatherName' />
+						</Col>
+						<Col span={8}>
+							<PHInput type='text' label='Father Occupation' name='guardian.fatherOccupation' />
+						</Col>
+						<Col span={8}>
+							<PHInput type='text' label='Father Contact No.' name='guardian.fatherContactNo' />
+						</Col>
+
+						<Col span={8}>
+							<PHInput type='text' label='Mother Name' name='guardian.motherName' />
+						</Col>
+						<Col span={8}>
+							<PHInput type='text' label='Mother Occupation' name='guardian.motherOccupation' />
+						</Col>
+						<Col span={8}>
+							<PHInput type='text' label='Mother Contact No.' name='guardian.motherContactNo' />
+						</Col>
+					</Row>
+
+					{/* local guardian info */}
+					<Divider>Local Guardian Information</Divider>
+					<Row gutter={10} align={'top'}>
+						<Col span={12}>
+							<PHInput type='text' label='Name' name='localGuardian.name' />
+						</Col>
+						<Col span={12}>
+							<PHInput type='text' label='Occupation' name='localGuardian.occupation' />
+						</Col>
+					</Row>
+					<Row gutter={10} align={'top'}>
+						<Col span={12}>
+							<PHInput type='text' label='Contact No.' name='localGuardian.contactNo' />
+						</Col>
+						<Col span={12}>
+							<PHInput type='text' label='Address' name='localGuardian.address' />
+						</Col>
+					</Row>
+
+					{/* academic info */}
+					<Divider>Academic Information</Divider>
+					<Row gutter={10} align={'top'}>
+						<Col span={12}>
+							<PHSelect disabled={SisLoading} label='Semester' name='admissionSemester' options={semesterOptions} />
+						</Col>
+						<Col span={12}>
+							<PHSelect
+								disabled={DisLoading}
+								label='Department'
+								name='academicDepartment'
+								options={departmentOptions}
+							/>
+						</Col>
+					</Row>
+
+					<Button type='primary' htmlType='submit' block disabled={isLoading}>
+						{isLoading ? <Spin /> : 'Create Faculty'}
+					</Button>
+				</PHForm>
+			</Col>
+		</Row>
 	);
 };
 
