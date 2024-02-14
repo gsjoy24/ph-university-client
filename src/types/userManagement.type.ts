@@ -59,6 +59,7 @@ export type TAdmissionSemester = {
 };
 
 export type TFaculty = {
+	_id: string;
 	name: TName;
 	designation: string;
 	gender: string;
