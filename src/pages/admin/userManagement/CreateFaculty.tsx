@@ -1,5 +1,5 @@
 import { Button, Col, Divider, Form, Input, Row, Spin } from 'antd';
-import { Controller } from 'react-hook-form';
+import { Controller, FieldValues, SubmitHandler } from 'react-hook-form';
 import PHTitle from '../../../components/PHTitle';
 import PHDatePicker from '../../../components/form/PHDatePicker';
 import PHForm from '../../../components/form/PHForm';
@@ -7,6 +7,7 @@ import PHInput from '../../../components/form/PHInput';
 import PHSelect from '../../../components/form/PHSelect';
 import { bloodGroupOptions, genderOptions } from '../../../constants/global';
 import { useGetAllAcademicDepartmentsQuery } from '../../../redux/features/admin/academicManagement.api';
+import { useAddFacultyMutation } from '../../../redux/features/admin/userManagement.api';
 
 const CreateFaculty = () => {
 	const { data: DData, isLoading: DisLoading } = useGetAllAcademicDepartmentsQuery(null);
@@ -14,8 +15,29 @@ const CreateFaculty = () => {
 		label: department?.name,
 		value: department?._id
 	}));
-	const onsSubmit = (values: any) => {
-		console.log(values);
+
+	const [addFaculty, { isLoading }] = useAddFacultyMutation();
+	const onsSubmit: SubmitHandler<FieldValues> = async (values) => {
+		const formData = new FormData();
+		const modifiedData = {
+			password: 'password123',
+			studentData: values
+		};
+
+		formData.append('data', JSON.stringify(modifiedData));
+		formData.append('file', values.image);
+
+		try {
+			const res = await addFaculty(formData);
+			if (res?.data?.success) {
+				toast.success(res?.data?.message);
+			} else {
+				console.log(res);
+				toast.error(res?.error?.message);
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	};
 	return (
 		<Row justify='center'>
@@ -26,7 +48,7 @@ const CreateFaculty = () => {
 					{/* name */}
 					<Row gutter={10} align={'bottom'}>
 						<Col span={8}>
-							<PHInput type='text' label='Student Name' name='name.firstName' placeholder='first name' />
+							<PHInput type='text' label='Faculty Name' name='name.firstName' placeholder='first name' />
 						</Col>
 						<Col span={8}>
 							<PHInput type='text' name='name.middleName' placeholder='middle name' />
@@ -93,54 +115,11 @@ const CreateFaculty = () => {
 						</Col>
 					</Row>
 
-					{/* guardian info */}
-					<Divider>Guardian Information</Divider>
-					<Row gutter={10} align={'top'}>
-						<Col span={8}>
-							<PHInput type='text' label='Father Name' name='guardian.fatherName' />
-						</Col>
-						<Col span={8}>
-							<PHInput type='text' label='Father Occupation' name='guardian.fatherOccupation' />
-						</Col>
-						<Col span={8}>
-							<PHInput type='text' label='Father Contact No.' name='guardian.fatherContactNo' />
-						</Col>
-
-						<Col span={8}>
-							<PHInput type='text' label='Mother Name' name='guardian.motherName' />
-						</Col>
-						<Col span={8}>
-							<PHInput type='text' label='Mother Occupation' name='guardian.motherOccupation' />
-						</Col>
-						<Col span={8}>
-							<PHInput type='text' label='Mother Contact No.' name='guardian.motherContactNo' />
-						</Col>
-					</Row>
-
-					{/* local guardian info */}
-					<Divider>Local Guardian Information</Divider>
-					<Row gutter={10} align={'top'}>
-						<Col span={12}>
-							<PHInput type='text' label='Name' name='localGuardian.name' />
-						</Col>
-						<Col span={12}>
-							<PHInput type='text' label='Occupation' name='localGuardian.occupation' />
-						</Col>
-					</Row>
-					<Row gutter={10} align={'top'}>
-						<Col span={12}>
-							<PHInput type='text' label='Contact No.' name='localGuardian.contactNo' />
-						</Col>
-						<Col span={12}>
-							<PHInput type='text' label='Address' name='localGuardian.address' />
-						</Col>
-					</Row>
-
 					{/* academic info */}
 					<Divider>Academic Information</Divider>
 					<Row gutter={10} align={'top'}>
 						<Col span={12}>
-							<PHSelect disabled={SisLoading} label='Semester' name='admissionSemester' options={semesterOptions} />
+							<PHInput type='text' label='Designation' name='designation' placeholder='exp. Professor' />
 						</Col>
 						<Col span={12}>
 							<PHSelect
