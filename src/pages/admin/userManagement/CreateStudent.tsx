@@ -47,7 +47,8 @@ import { useAddStudentMutation } from '../../../redux/features/admin/userManagem
 // };
 
 const CreateStudent = () => {
-	const { data: SData, isLoading: SisLoading } = useGetAllSemestersQuery(null);
+	const { data: SData, isLoading: SisLoading } = useGetAllSemestersQuery([{ name: 'sort', value: 'year' }]);
+
 	const semesterOptions = SData?.data?.map((semester) => ({
 		label: `${semester?.name} - ${semester?.year}`,
 		value: semester?._id

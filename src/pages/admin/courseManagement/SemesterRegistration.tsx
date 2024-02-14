@@ -6,16 +6,25 @@ import PHForm from '../../../components/form/PHForm';
 import PHSelect from '../../../components/form/PHSelect';
 import { monthNamesOptions } from '../../../constants/global';
 import { semesterOptions } from '../../../constants/semester';
-import { useAddAcademicSemesterMutation } from '../../../redux/features/admin/academicManagement.api';
+import {
+	useAddAcademicSemesterMutation,
+	useGetAllSemestersQuery
+} from '../../../redux/features/admin/academicManagement.api';
 import { academicSemesterSchema } from '../../../schemas/academicManagement.schema';
 import TAcademicSemester from '../../../types/academicManagement.type';
 import { TResponse } from '../../../types/global.type';
 
 const SemesterRegistration = () => {
 	const isLoading = false;
+	const { data: SData, isLoading: SisLoading } = useGetAllSemestersQuery([{ name: 'sort', value: 'year' }]);
+
+	const semesterOptions = SData?.data?.map((semester) => ({
+		label: `${semester?.name} - ${semester?.year}`,
+		value: semester?._id
+	}));
 
 	const onSubmit: SubmitHandler<FieldValues> = async ({ code, year, startMonth, endMonth }: any) => {
-		const findData = semesterOptions.find((item) => item?.value === code);
+		const findData = semesterOptions?.find((item) => item?.value === code);
 		const semesterData: TAcademicSemester = {
 			name: findData!.label,
 			code,
