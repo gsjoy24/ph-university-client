@@ -1,11 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Col, Flex, Select, Spin } from 'antd';
+import { Button, Col, Flex, Row, Select, Spin } from 'antd';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'sonner';
+import PHTitle from '../../../components/PHTitle';
+import PHDatePicker from '../../../components/form/PHDatePicker';
 import PHForm from '../../../components/form/PHForm';
+import PHInput from '../../../components/form/PHInput';
 import PHSelect from '../../../components/form/PHSelect';
 import { monthNamesOptions } from '../../../constants/global';
-import { semesterOptions } from '../../../constants/semester';
+import { semesterOptions, semesterStatusOptions } from '../../../constants/semester';
 import {
 	useAddAcademicSemesterMutation,
 	useGetAllSemestersQuery
@@ -48,30 +51,47 @@ const SemesterRegistration = () => {
 	};
 
 	return (
-		<Flex justify='center' align='center'>
-			<Col span={12}>
+		<Row>
+			<Col span={20}>
+				<PHTitle title='Create Academic Semester' />
+			</Col>
+			<Col span={20}>
 				<h1
 					style={{
 						marginBottom: '20px'
 					}}
-				>
-					Create Academic Semester
-				</h1>
+				></h1>
 				<PHForm onSubmit={onSubmit}>
-					<Flex justify='space-between' gap={10} align='center'>
-						<PHSelect label='Semester' options={semesterOptions} name='code' />
-					</Flex>
-					<Flex justify='space-between' gap={10} align='center'>
-						<PHSelect label='Start Month' options={monthNamesOptions} name='startMonth' />
-						<PHSelect label='End Month' options={monthNamesOptions} name='endMonth' />
-					</Flex>
+					<Row gutter={10}>
+						<Col span={12}>
+							<PHSelect label='Semester' options={semesterOptions} name='code' />
+						</Col>
+						<Col span={12}>
+							{' '}
+							<PHSelect label='Semester Status' options={semesterStatusOptions} name='status' />
+						</Col>
+
+						<Col span={12}>
+							<PHDatePicker label='Start Date' name='startDate' />
+						</Col>
+						<Col span={12}>
+							<PHDatePicker label='End Date' name='endDate' />
+						</Col>
+
+						<Col span={12}>
+							<PHInput type='number' label='Min Credit' name='minCredit' />
+						</Col>
+						<Col span={12}>
+							<PHInput type='number' label='Max Credit' name='maxCredit' />
+						</Col>
+					</Row>
 
 					<Button block type='primary' htmlType='submit' disabled={isLoading}>
 						{isLoading ? <Spin /> : 'Create'}
 					</Button>
 				</PHForm>
 			</Col>
-		</Flex>
+		</Row>
 	);
 };
 
