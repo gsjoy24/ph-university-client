@@ -23,24 +23,28 @@ const CreateCourse = () => {
 	}));
 
 	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-		const { minCredit, maxCredit, ...restData } = data;
 		const modifiedData = {
-			...restData,
-			minCredit: parseInt(minCredit),
-			maxCredit: parseInt(maxCredit)
+			...data,
+			code: Number(data.code),
+			credits: Number(data.credits),
+			preRequisiteCourses: data.preRequisiteCourses?.map((course: string) => ({
+				course: course
+			}))
 		};
 
-		try {
-			const res = (await registerSemester(modifiedData)) as TResponse<TSemesterRegistration>;
-			if (res?.data?.message) {
-				toast.success(res?.data?.message);
-			} else {
-				toast.error(res?.error?.data?.message);
-			}
-		} catch (error) {
-			console.log('error:', error);
-			toast.error('Something went wrong');
-		}
+		console.log(modifiedData);
+
+		// 	try {
+		// 		const res = (await registerSemester(modifiedData)) as TResponse<TSemesterRegistration>;
+		// 		if (res?.data?.message) {
+		// 			toast.success(res?.data?.message);
+		// 		} else {
+		// 			toast.error(res?.error?.data?.message);
+		// 		}
+		// 	} catch (error) {
+		// 		console.log('error:', error);
+		// 		toast.error('Something went wrong');
+		// 	}
 	};
 
 	return (
@@ -67,6 +71,17 @@ const CreateCourse = () => {
 						</Col>
 						<Col span={12}>
 							<PHInput type='number' label='Credits' name='credits' />
+						</Col>
+						<Col span={12}>
+							<PHSelect
+								label='Pre requisite Courses'
+								name='preRequisiteCourses'
+								mode='multiple'
+								options={[
+									{ label: 'd', value: 's' },
+									{ label: 'sd', value: 'ss' }
+								]}
+							/>
 						</Col>
 					</Row>
 
