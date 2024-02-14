@@ -1,5 +1,6 @@
 import { Button, Col, Divider, Form, Input, Row, Spin } from 'antd';
 import { Controller, FieldValues, SubmitHandler } from 'react-hook-form';
+import { toast } from 'sonner';
 import PHTitle from '../../../components/PHTitle';
 import PHDatePicker from '../../../components/form/PHDatePicker';
 import PHForm from '../../../components/form/PHForm';
@@ -21,7 +22,7 @@ const CreateFaculty = () => {
 		const formData = new FormData();
 		const modifiedData = {
 			password: 'password123',
-			studentData: values
+			facultyData: values
 		};
 
 		formData.append('data', JSON.stringify(modifiedData));
@@ -29,6 +30,7 @@ const CreateFaculty = () => {
 
 		try {
 			const res = await addFaculty(formData);
+			console.log(res);
 			if (res?.data?.success) {
 				toast.success(res?.data?.message);
 			} else {
