@@ -5,19 +5,19 @@ import PHTitle from '../../../components/PHTitle';
 import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
 import PHSelect from '../../../components/form/PHSelect';
-import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
-import { useAddCourseMutation } from '../../../redux/features/admin/courseManagement.api';
+
+import { useAddCourseMutation, useGetAllCoursesQuery } from '../../../redux/features/admin/courseManagement.api';
 
 import { TCourse } from '../../../types';
 import { TResponse } from '../../../types/global.type';
 
 const CreateCourse = () => {
 	const [addCourse, { isLoading }] = useAddCourseMutation();
-	const { data: SData, isLoading: SisLoading } = useGetAllSemestersQuery([{ name: 'sort', value: 'year' }]);
+	const { data: SData, isLoading: SisLoading } = useGetAllCoursesQuery([{ name: 'sort', value: 'code' }]);
 
-	const semesterOptions = SData?.data?.map((semester) => ({
-		label: `${semester?.name} - ${semester?.year}`,
-		value: semester?._id
+	const courseOptions = SData?.data?.map((course) => ({
+		label: `${course?.title} - ${course?.code}`,
+		value: course?._id
 	}));
 
 	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -73,10 +73,7 @@ const CreateCourse = () => {
 								label='Pre Requisite Courses (Optional for some courses)'
 								name='preRequisiteCourses'
 								mode='multiple'
-								options={[
-									{ label: 'd', value: 's' },
-									{ label: 'sd', value: 'ss' }
-								]}
+								options={courseOptions}
 							/>
 						</Col>
 					</Row>
