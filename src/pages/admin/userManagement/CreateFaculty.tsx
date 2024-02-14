@@ -9,6 +9,7 @@ import PHSelect from '../../../components/form/PHSelect';
 import { bloodGroupOptions, genderOptions } from '../../../constants/global';
 import { useGetAllAcademicDepartmentsQuery } from '../../../redux/features/admin/academicManagement.api';
 import { useAddFacultyMutation } from '../../../redux/features/admin/userManagement.api';
+import { TFaculty, TResponse } from '../../../types';
 
 const CreateFaculty = () => {
 	const { data: DData, isLoading: DisLoading } = useGetAllAcademicDepartmentsQuery(null);
@@ -29,7 +30,7 @@ const CreateFaculty = () => {
 		formData.append('file', values.image);
 
 		try {
-			const res = await addFaculty(formData);
+			const res = (await addFaculty(formData)) as TResponse<TFaculty>;
 			console.log(res);
 			if (res?.data?.success) {
 				toast.success(res?.data?.message);
