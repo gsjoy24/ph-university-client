@@ -1,11 +1,12 @@
 import { Button, Flex, Modal, Popover, Table, Tag } from 'antd';
 import { FilterDropdownProps } from 'antd/es/table/interface';
 import { useState } from 'react';
+import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineUserAdd } from 'react-icons/ai';
 import PHForm from '../../../components/form/PHForm';
 import PHSelect from '../../../components/form/PHSelect';
 import { useGetAllAcademicFacultiesQuery } from '../../../redux/features/admin/academicManagement.api';
-import { useGetAllCoursesQuery } from '../../../redux/features/admin/courseManagement.api';
+import { useAssignFacultiesMutation, useGetAllCoursesQuery } from '../../../redux/features/admin/courseManagement.api';
 import { useGetAllFacultiesQuery } from '../../../redux/features/admin/userManagement.api';
 import { TCourse, TFaculty } from '../../../types';
 import formatDate from '../../../utils/formatDate';
@@ -37,7 +38,6 @@ const column = [
 		title: 'Pre Req. Courses',
 		dataIndex: 'preRequisiteCourses',
 		render(preRequisiteCourses: any[]) {
-			console.log('preRequisiteCourses:', preRequisiteCourses);
 			return (
 				<div>
 					{preRequisiteCourses?.map((obj) => (
@@ -99,6 +99,11 @@ const AddFacultyModal = ({ course }: { course: TCourse }) => {
 		value: faculty?._id
 	}));
 
+	const [assignFaculties, { isLoading }] = useAssignFacultiesMutation();
+	const onSubmit: SubmitHandler<FieldValues> = (data) => {
+		console.log('data:', data);
+		setOpenModal(false);
+	};
 	return (
 		<>
 			<Popover content='Add Faculty'>
@@ -109,13 +114,14 @@ const AddFacultyModal = ({ course }: { course: TCourse }) => {
 				title={`Add Faculty to ${course?.title} - ${course?.code}`}
 				centered
 				open={openModal}
-				onOk={() => setOpenModal(false)}
 				onCancel={() => setOpenModal(false)}
-				okText='Add Faculty'
-				okType='dashed'
+				footer=''
 			>
-				<PHForm onSubmit={() => {}}>
-					<PHSelect label='Faculty' name='faculty' options={facultyOptions} />
+				<PHForm onSubmit={onSubmit}>
+					<PHSelect label='Faculty' name='faculties' options={facultyOptions} mode='multiple' />
+					<Button type='dashed' htmlType='submit' loading={isLoading} disabled={isLoading}>
+						Add Faculty
+					</Button>
 				</PHForm>
 			</Modal>
 		</>
