@@ -2,8 +2,12 @@ import { Button, Flex, Modal, Popover, Table, Tag } from 'antd';
 import { FilterDropdownProps } from 'antd/es/table/interface';
 import { useState } from 'react';
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineUserAdd } from 'react-icons/ai';
+import PHForm from '../../../components/form/PHForm';
+import PHSelect from '../../../components/form/PHSelect';
 import { useGetAllAcademicFacultiesQuery } from '../../../redux/features/admin/academicManagement.api';
 import { useGetAllCoursesQuery } from '../../../redux/features/admin/courseManagement.api';
+import { useGetAllFacultiesQuery } from '../../../redux/features/admin/userManagement.api';
+import { TCourse, TFaculty } from '../../../types';
 import formatDate from '../../../utils/formatDate';
 
 const column = [
@@ -54,9 +58,9 @@ const column = [
 	},
 	{
 		title: 'Action',
-		render: (_text: string, _record: any) => (
+		render: (course: TCourse) => (
 			<Flex gap={5}>
-				<AddFacultyModal />
+				<AddFacultyModal course={course} />
 				<Popover content='Update'>
 					<Button type='dashed' icon={<AiOutlineEdit size={20} />} />
 				</Popover>
@@ -86,24 +90,33 @@ const Courses = () => {
 	);
 };
 
-const AddFacultyModal = () => {
+const AddFacultyModal = ({ course }: { course: TCourse }) => {
 	const [openModal, setOpenModal] = useState(false);
+	const { data } = useGetAllFacultiesQuery([{ name: 'sort', value: 'fullName' }]);
+
+	const facultyOptions = data?.data?.map((faculty) => ({
+		label: faculty?.fullName,
+		value: faculty?._id
+	}));
+
 	return (
 		<>
-			<Popover content='Assign Faculty'>
+			<Popover content='Add Faculty'>
 				<Button type='dashed' onClick={() => setOpenModal(true)} icon={<AiOutlineUserAdd size={20} />} />
 			</Popover>
 
 			<Modal
-				title='Vertically centered modal dialog'
+				title={`Add Faculty to ${course?.title} - ${course?.code}`}
 				centered
 				open={openModal}
 				onOk={() => setOpenModal(false)}
 				onCancel={() => setOpenModal(false)}
+				okText='Add Faculty'
+				okType='dashed'
 			>
-				<p>some contents...</p>
-				<p>some contents...</p>
-				<p>some contents...</p>
+				<PHForm onSubmit={() => {}}>
+					<PHSelect label='Faculty' name='faculty' options={facultyOptions} />
+				</PHForm>
 			</Modal>
 		</>
 	);

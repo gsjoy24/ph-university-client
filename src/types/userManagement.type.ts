@@ -61,6 +61,7 @@ export type TAdmissionSemester = {
 export type TFaculty = {
 	_id: string;
 	name: TName;
+	fullName: string;
 	designation: string;
 	gender: string;
 	dateOfBirth: string;
