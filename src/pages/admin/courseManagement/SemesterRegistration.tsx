@@ -32,7 +32,7 @@ const SemesterRegistration = () => {
 		};
 
 		try {
-			const res = (await registerSemester(modifiedData)) as TResponse<TSemesterRegistration>;
+			const res = (await registerSemester(modifiedData)) as TResponse<any>;
 			if (res?.data?.message) {
 				toast.success(res?.data?.message);
 			} else {
