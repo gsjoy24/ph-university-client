@@ -9,21 +9,31 @@ import PHInput from '../../../components/form/PHInput';
 import PHSelect from '../../../components/form/PHSelect';
 import { semesterStatusOptions } from '../../../constants/semester';
 import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
-import { useRegisterSemesterMutation } from '../../../redux/features/admin/courseManagement.api';
+import {
+	useGetAllRegisteredSemestersQuery,
+	useRegisterSemesterMutation
+} from '../../../redux/features/admin/courseManagement.api';
 
+import { useState } from 'react';
+import PHSelectWithWatch from '../../../components/form/PHSelectWithWatch';
 import { useGetAllFacultiesQuery } from '../../../redux/features/admin/userManagement.api';
 import { TResponse } from '../../../types/global.type';
 
 const OfferCourse = () => {
+	const [id, setId] = useState<string | undefined>(undefined);
 	// registerSemester is a function that is used to register a semester
 	const [registerSemester, { isLoading }] = useRegisterSemesterMutation();
 
-	const { data: SData, isLoading: SisLoading } = useGetAllSemestersQuery([{ name: 'sort', value: 'year' }]);
-	const semesterOptions = SData?.data?.map((semester) => ({
-		label: `${semester?.name} - ${semester?.year}`,
+	// registered semesters and options
+	const { data: registeredSemesters, isLoading: SisLoading } = useGetAllRegisteredSemestersQuery([
+		{ name: 'sort', value: 'status' }
+	]);
+	const semesterOptions = registeredSemesters?.data?.map((semester: any) => ({
+		label: `${semester?.status} ${semester?.academicSemester?.name} - ${semester?.academicSemester?.year}`,
 		value: semester?._id
 	}));
 
+	// academic faculties and options
 	const { data: academicFaculties, isLoading: FisLoading } = useGetAllFacultiesQuery([{ name: 'sort', value: 'name' }]);
 	const facultyOptions = academicFaculties?.data?.map((faculty) => ({
 		label: faculty?.name,
@@ -47,26 +57,14 @@ const OfferCourse = () => {
 				></h1>
 				<PHForm onSubmit={onSubmit}>
 					<Row gutter={10}>
-						<Col span={12}>
-							<PHSelect label='Semester' options={semesterOptions} name='academicSemester' disabled={SisLoading} />
-						</Col>
-						<Col span={12}>
-							{' '}
-							<PHSelect label='Semester Status' options={semesterStatusOptions} name='status' />
-						</Col>
-
-						<Col span={12}>
-							<PHDatePicker label='Start Date' name='startDate' />
-						</Col>
-						<Col span={12}>
-							<PHDatePicker label='End Date' name='endDate' />
-						</Col>
-
-						<Col span={12}>
-							<PHInput type='number' label='Min Credit' name='minCredit' />
-						</Col>
-						<Col span={12}>
-							<PHInput type='number' label='Max Credit' name='maxCredit' />
+						<Col>
+							<PHSelectWithWatch
+								label='Semester'
+								name='academicSemester'
+								options={semesterOptions}
+								onValueChange={setId}
+								disabled={SisLoading}
+							/>
 						</Col>
 					</Row>
 
