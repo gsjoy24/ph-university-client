@@ -3,12 +3,13 @@ import { FilterDropdownProps } from 'antd/es/table/interface';
 import { useState } from 'react';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineUserAdd } from 'react-icons/ai';
+import { toast } from 'sonner';
 import PHForm from '../../../components/form/PHForm';
 import PHSelect from '../../../components/form/PHSelect';
 import { useGetAllAcademicFacultiesQuery } from '../../../redux/features/admin/academicManagement.api';
 import { useAssignFacultiesMutation, useGetAllCoursesQuery } from '../../../redux/features/admin/courseManagement.api';
 import { useGetAllFacultiesQuery } from '../../../redux/features/admin/userManagement.api';
-import { TCourse, TFaculty } from '../../../types';
+import { TCourse, TFaculty, TResponse } from '../../../types';
 import formatDate from '../../../utils/formatDate';
 
 const column = [
@@ -100,9 +101,26 @@ const AddFacultyModal = ({ course }: { course: TCourse }) => {
 	}));
 
 	const [assignFaculties, { isLoading }] = useAssignFacultiesMutation();
-	const onSubmit: SubmitHandler<FieldValues> = (data) => {
-		console.log('data:', data);
-		setOpenModal(false);
+	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+		console.log({
+			courseId: course._id,
+			faculties: data.faculties
+		});
+		try {
+			const res = (await assignFaculties({
+				courseId: course._id,
+				faculties: data.faculties
+			})) as TResponse<any>;
+			if (res?.data?.message) {
+				setOpenModal(false);
+				toast.success(res?.data?.message);
+			} else {
+				toast.error(res?.error?.data?.message);
+			}
+		} catch (error) {
+			console.log('error:', error);
+			toast.error('Something went wrong');
+		}
 	};
 	return (
 		<>

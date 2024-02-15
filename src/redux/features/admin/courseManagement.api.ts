@@ -62,7 +62,7 @@ const courseManagementApi = baseApi.injectEndpoints({
 
 		assignFaculties: builder.mutation({
 			query: (data) => ({
-				url: `/courses/${data.courseId}/faculties`,
+				url: `/courses/${data.courseId}/assign-faculties`,
 				method: 'POST',
 				body: data.faculties
 			})
