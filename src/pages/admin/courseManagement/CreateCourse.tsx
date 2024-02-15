@@ -8,7 +8,6 @@ import PHSelect from '../../../components/form/PHSelect';
 
 import { useAddCourseMutation, useGetAllCoursesQuery } from '../../../redux/features/admin/courseManagement.api';
 
-import { TCourse } from '../../../types';
 import { TResponse } from '../../../types/global.type';
 
 const CreateCourse = () => {
@@ -31,7 +30,7 @@ const CreateCourse = () => {
 		};
 
 		try {
-			const res = (await addCourse(modifiedData)) as TResponse<TCourse>;
+			const res = (await addCourse(modifiedData)) as TResponse<any>;
 			if (res?.data?.message) {
 				toast.success(res?.data?.message);
 			} else {
