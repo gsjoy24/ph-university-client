@@ -18,6 +18,13 @@ export const monthNamesOptions = monthNames.map((month) => ({
 	label: month
 }));
 
+export const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+export const dayNamesOptions = dayNames.map((day) => ({
+	value: day,
+	label: day
+}));
+
 export const genderOptions = [
 	{
 		label: 'Male',

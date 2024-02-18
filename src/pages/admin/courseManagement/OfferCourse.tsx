@@ -1,26 +1,43 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Col, Row, Spin } from 'antd';
+import { Button, Col, Form, Row, Spin, TimePicker } from 'antd';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
-import { toast } from 'sonner';
+
 import PHTitle from '../../../components/PHTitle';
-import PHDatePicker from '../../../components/form/PHDatePicker';
+
 import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
 import PHSelect from '../../../components/form/PHSelect';
-import { semesterStatusOptions } from '../../../constants/semester';
-import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
+import { useGetAllAcademicDepartmentsQuery } from '../../../redux/features/admin/academicManagement.api';
 import {
+	useGetAllCoursesQuery,
 	useGetAllRegisteredSemestersQuery,
+	useGetCourseFacultiesQuery,
 	useRegisterSemesterMutation
 } from '../../../redux/features/admin/courseManagement.api';
 
 import { useState } from 'react';
 import PHSelectWithWatch from '../../../components/form/PHSelectWithWatch';
-import { useGetAllFacultiesQuery } from '../../../redux/features/admin/userManagement.api';
+import PHTimePicker from '../../../components/form/PHTimePicker';
+import { dayNamesOptions } from '../../../constants/global';
+import { TFaculty } from '../../../types';
 import { TResponse } from '../../../types/global.type';
 
 const OfferCourse = () => {
-	const [id, setId] = useState<string | undefined>(undefined);
+	const [courseId, setCourseId] = useState<string | undefined>(undefined);
+
+	//! academic departments and options
+	const { data: academicDepartments, isLoading: DepartmentsIsLoading } = useGetAllAcademicDepartmentsQuery([
+		{
+			name: 'sort',
+			value: 'name'
+		}
+	]);
+	const departmentOptions = academicDepartments?.data?.map((department) => ({
+		label: department?.name,
+		value: department?._id
+	}));
+
+	console.log(academicDepartments);
+
 	// registerSemester is a function that is used to register a semester
 	const [registerSemester, { isLoading }] = useRegisterSemesterMutation();
 
@@ -33,12 +50,21 @@ const OfferCourse = () => {
 		value: semester?._id
 	}));
 
+	// courses and options
+	const { data: courses, isLoading: courseLoading } = useGetAllCoursesQuery([{ name: 'sort', value: 'year' }]);
+	const courseOptions = courses?.data?.map((course) => ({
+		label: `${course?.title} - ${course?.code}`,
+		value: course?._id
+	}));
+
 	// academic faculties and options
-	const { data: academicFaculties, isLoading: FisLoading } = useGetAllFacultiesQuery([{ name: 'sort', value: 'name' }]);
-	const facultyOptions = academicFaculties?.data?.map((faculty) => ({
+	const { data: courseFaculties, isLoading: facultiesLoading } = useGetCourseFacultiesQuery(courseId);
+	const facultyOptions = courseFaculties?.data?.faculties?.map((faculty: TFaculty) => ({
 		label: faculty?.name,
 		value: faculty?._id
 	}));
+
+	console.log(facultyOptions);
 
 	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
 		console.log(data);
@@ -47,7 +73,7 @@ const OfferCourse = () => {
 	return (
 		<Row justify='center'>
 			<Col span={20}>
-				<PHTitle title='Create Academic Semester' />
+				<PHTitle title='Offer Courses' />
 			</Col>
 			<Col span={20}>
 				<h1
@@ -57,14 +83,65 @@ const OfferCourse = () => {
 				></h1>
 				<PHForm onSubmit={onSubmit}>
 					<Row gutter={10}>
-						<Col>
-							<PHSelectWithWatch
-								label='Semester'
-								name='academicSemester'
-								options={semesterOptions}
-								onValueChange={setId}
+						<Col span={12}>
+							<PHSelect
+								label='Department'
+								name='academicDepartment'
+								options={departmentOptions}
 								disabled={SisLoading}
 							/>
+						</Col>
+						<Col span={12}>
+							<PHSelectWithWatch
+								label='Course'
+								name='course'
+								options={courseOptions}
+								disabled={SisLoading}
+								onValueChange={setCourseId}
+							/>
+						</Col>
+						{/* <Col span={12}>
+							<PHSelect label='Faculty' name='faculty' options={facultyOptions} disabled={!courseId} />
+						</Col> */}
+						<Col span={12}>
+							<PHSelect label='Semester' name='semesterRegistration' options={semesterOptions} disabled={SisLoading} />
+						</Col>
+
+						<Col span={12}>
+							<PHInput label='Max Capacity' name='maxCapacity' type='number' />
+						</Col>
+						<Col span={6}>
+							<PHSelect
+								label='Section'
+								name='section'
+								options={[
+									{
+										label: 'A',
+										value: 'A'
+									},
+									{
+										label: 'B',
+										value: 'B'
+									},
+									{
+										label: 'C',
+										value: 'C'
+									},
+									{
+										label: 'D',
+										value: 'D'
+									}
+								]}
+							/>
+						</Col>
+						<Col span={6}>
+							<PHSelect label='Days' name='days' options={dayNamesOptions} mode='multiple' />
+						</Col>
+						<Col span={6}>
+							<PHTimePicker label='Start Time' name='startTime' />
+						</Col>
+						<Col span={6}>
+							<PHTimePicker label='End Time' name='endTime' />
 						</Col>
 					</Row>
 
