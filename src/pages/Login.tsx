@@ -37,6 +37,7 @@ const Login = () => {
 			toast.error(error?.data?.message, { id: toastId, duration: 2000 });
 		}
 	};
+
 	return (
 		<Flex justify='center' align='center'>
 			<PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
