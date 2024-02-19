@@ -10,10 +10,10 @@ type TProtectedRoute = {
 };
 
 const ProtectedRoute = ({ children, role }: TProtectedRoute) => {
+	const dispatch = useAppDispatch();
 	const token = useAppSelector(selectCurrentToken);
 	let user: TUser | null = null;
 
-	const dispatch = useAppDispatch();
 	if (!token) {
 		dispatch(logOut());
 		return <Navigate to='/login' replace />;
