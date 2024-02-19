@@ -21,9 +21,17 @@ const Login = () => {
 		try {
 			const res = await login(data).unwrap();
 			const userInfo = verifyToken(res.data.accessToken) as TUser;
+
+			// Save user info and token to redux store
 			dispatch(setUser({ user: userInfo, token: res.data.accessToken }));
 			toast.success('Logged in successfully!', { id: toastId, duration: 2000 });
-			navigate(`/${userInfo.role}/dashboard`);
+
+			// Redirect to change password page if user logged in for the first time and needs to change password
+			if (res.data.needsPasswordChange) {
+				navigate('/change-password');
+			} else {
+				navigate(`/${userInfo.role}/dashboard`);
+			}
 		} catch (error: any) {
 			console.log('error', error);
 			toast.error(error?.data?.message, { id: toastId, duration: 2000 });
