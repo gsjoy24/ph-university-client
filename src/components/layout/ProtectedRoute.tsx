@@ -9,13 +9,14 @@ type TProtectedRoute = {
 const ProtectedRoute = ({ children, role }: TProtectedRoute) => {
 	const token = useAppSelector(selectCurrentToken);
 	const user = useAppSelector(selectCurrentUser);
+
 	const dispatch = useAppDispatch();
 	if (!token) {
 		dispatch(logOut());
 		return <Navigate to='/login' replace />;
 	}
-	if (user.role !== role) {
-		return <Navigate to='/' replace />;
+	if (role !== undefined && user?.role !== role) {
+		return <Navigate to='/login' replace />;
 	}
 
 	return children;

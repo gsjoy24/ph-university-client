@@ -10,9 +10,8 @@ import { useAppDispatch } from '../redux/hooks';
 import { TUser } from '../types';
 import { verifyToken } from '../utils/verifyToken';
 
-
 const Login = () => {
-	const defaultValues = { userId: 'A-0001', password: 'securePassword123' };
+	const defaultValues = { userId: '2024010001', password: 'password123' };
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const [login, { isLoading }] = useLoginMutation();
@@ -25,8 +24,9 @@ const Login = () => {
 			dispatch(setUser({ user: userInfo, token: res.data.accessToken }));
 			toast.success('Logged in successfully!', { id: toastId, duration: 2000 });
 			navigate(`/${userInfo.role}/dashboard`);
-		} catch (error) {
-			toast.error('Something went wrong!', { id: toastId, duration: 2000 });
+		} catch (error: any) {
+			console.log('error', error);
+			toast.error(error?.data?.message, { id: toastId, duration: 2000 });
 		}
 	};
 	return (
