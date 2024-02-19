@@ -22,9 +22,12 @@ import { TFaculty } from '../../../types';
 import { TResponse } from '../../../types/global.type';
 
 const OfferCourse = () => {
-	const [courseId, setCourseId] = useState<string | undefined>(undefined);
+	const [courseId, setCourseId] = useState<string | undefined>('');
 
-	//! academic departments and options
+	// registerSemester is a function that is used to register a semester
+	const [registerSemester, { isLoading }] = useRegisterSemesterMutation();
+
+	//*  academic departments and options
 	const { data: academicDepartments, isLoading: DepartmentsIsLoading } = useGetAllAcademicDepartmentsQuery([
 		{
 			name: 'sort',
@@ -36,12 +39,14 @@ const OfferCourse = () => {
 		value: department?._id
 	}));
 
-	console.log(academicDepartments);
+	//! courses and options
+	const { data: courses, isLoading: courseLoading } = useGetAllCoursesQuery([{ name: 'sort', value: 'year' }]);
+	const courseOptions = courses?.data?.map((course) => ({
+		label: `${course?.title} - ${course?.code}`,
+		value: course?._id
+	}));
 
-	// registerSemester is a function that is used to register a semester
-	const [registerSemester, { isLoading }] = useRegisterSemesterMutation();
-
-	// registered semesters and options
+	//! registered semesters and options
 	const { data: registeredSemesters, isLoading: SisLoading } = useGetAllRegisteredSemestersQuery([
 		{ name: 'sort', value: 'status' }
 	]);
@@ -50,21 +55,14 @@ const OfferCourse = () => {
 		value: semester?._id
 	}));
 
-	// courses and options
-	const { data: courses, isLoading: courseLoading } = useGetAllCoursesQuery([{ name: 'sort', value: 'year' }]);
-	const courseOptions = courses?.data?.map((course) => ({
-		label: `${course?.title} - ${course?.code}`,
-		value: course?._id
-	}));
-
-	// academic faculties and options
-	const { data: courseFaculties, isLoading: facultiesLoading } = useGetCourseFacultiesQuery(courseId);
-	const facultyOptions = courseFaculties?.data?.faculties?.map((faculty: TFaculty) => ({
-		label: faculty?.name,
-		value: faculty?._id
-	}));
-
-	console.log(facultyOptions);
+	const { data: courseFaculties, isLoading: facultiesLoading } = useGetCourseFacultiesQuery(courseId, {
+		skip: !courseId
+	});
+	const facultyOptions =
+		courseFaculties?.data?.faculties?.map((faculty: TFaculty) => ({
+			label: faculty?.fullName,
+			value: faculty?._id
+		})) || [];
 
 	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
 		console.log(data);
@@ -100,9 +98,9 @@ const OfferCourse = () => {
 								onValueChange={setCourseId}
 							/>
 						</Col>
-						{/* <Col span={12}>
+						<Col span={12}>
 							<PHSelect label='Faculty' name='faculty' options={facultyOptions} disabled={!courseId} />
-						</Col> */}
+						</Col>
 						<Col span={12}>
 							<PHSelect label='Semester' name='semesterRegistration' options={semesterOptions} disabled={SisLoading} />
 						</Col>
@@ -111,6 +109,12 @@ const OfferCourse = () => {
 							<PHInput label='Max Capacity' name='maxCapacity' type='number' />
 						</Col>
 						<Col span={6}>
+							<PHTimePicker label='Start Time' name='startTime' />
+						</Col>
+						<Col span={6}>
+							<PHTimePicker label='End Time' name='endTime' />
+						</Col>
+						<Col span={8}>
 							<PHSelect
 								label='Section'
 								name='section'
@@ -134,14 +138,8 @@ const OfferCourse = () => {
 								]}
 							/>
 						</Col>
-						<Col span={6}>
+						<Col span={16}>
 							<PHSelect label='Days' name='days' options={dayNamesOptions} mode='multiple' />
-						</Col>
-						<Col span={6}>
-							<PHTimePicker label='Start Time' name='startTime' />
-						</Col>
-						<Col span={6}>
-							<PHTimePicker label='End Time' name='endTime' />
 						</Col>
 					</Row>
 
