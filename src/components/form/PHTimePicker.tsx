@@ -11,7 +11,7 @@ const PHTimePicker = ({ label, name }: TPHSelectProps) => {
 	return (
 		<Controller
 			name={name}
-			render={({ field }) => (
+			render={({ field, fieldState: { error } }) => (
 				<Form.Item label={label} style={{ marginBottom: '10px', width: '100%' }}>
 					<TimePicker
 						{...field}
@@ -20,6 +20,12 @@ const PHTimePicker = ({ label, name }: TPHSelectProps) => {
 						style={{ width: '100%' }}
 						format='HH:mm'
 					/>
+					{error && (
+						<small style={{ color: 'red', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
+							<MdErrorOutline size={14} />
+							{error.message}
+						</small>
+					)}
 				</Form.Item>
 			)}
 		/>

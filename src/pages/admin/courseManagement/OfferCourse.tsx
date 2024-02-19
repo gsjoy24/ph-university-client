@@ -65,7 +65,7 @@ const OfferCourse = () => {
 		})) || [];
 
 	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-		console.log(data);
+		console.log(data.startTime, data.endTime);
 	};
 
 	return (
