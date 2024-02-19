@@ -1,7 +1,12 @@
+import { Row } from 'antd';
+import PHTitle from '../components/PHTitle';
+
 const ChangePassword = () => {
 	return (
 		<div>
-			<h1>This is ChangePassword component</h1>
+			<Row justify='center' align='middle' style={{ height: '100vh' }}>
+				<PHTitle title='Change Password' />
+			</Row>
 		</div>
 	);
 };

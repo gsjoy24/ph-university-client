@@ -57,16 +57,18 @@ const Sidebar = () => {
 			<Menu theme='dark' mode='inline' defaultSelectedKeys={['4']} items={sidebarItems} />
 			<Button
 				type='dashed'
-				style={{
-					position: 'absolute',
-					bottom: '20px',
-					left: '20px',
-					width: '180px',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-					gap: '10px'
-				}}
+				danger
+				// style={{
+				// 	position: 'absolute',
+				// 	bottom: '20px',
+				// 	left: '20px',
+				// 	width: '180px',
+				// 	display: 'flex',
+				// 	justifyContent: 'center',
+				// 	alignItems: 'center',
+				// 	gap: '10px'
+				// }}
+				className='absolute bottom-5 left-5 w-[180px] flex justify-center items-center gap-3'
 				onClick={() => dispatch(logOut())}
 			>
 				<AiOutlineLogout />
