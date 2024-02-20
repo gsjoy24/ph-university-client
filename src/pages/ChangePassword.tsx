@@ -17,7 +17,7 @@ const ChangePassword = () => {
 	};
 	return (
 		<div>
-			<Row justify='center' align='middle' style={{ height: '100vh' }}>
+			<Row justify='center' align='middle' style={{ height: '90vh' }}>
 				<Col span={24} className='flex justify-center'>
 					<PHTitle title='Change Password' />
 				</Col>
