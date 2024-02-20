@@ -11,7 +11,7 @@ import { TUser } from '../types';
 import { verifyToken } from '../utils/verifyToken';
 
 const Login = () => {
-	const defaultValues = { userId: '2024010001', password: 'password123' };
+	const defaultValues = { userId: '2024010001', password: 'password1234' };
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const [login, { isLoading }] = useLoginMutation();
