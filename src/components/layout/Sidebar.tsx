@@ -58,17 +58,7 @@ const Sidebar = () => {
 			<Button
 				type='dashed'
 				danger
-				// style={{
-				// 	position: 'absolute',
-				// 	bottom: '20px',
-				// 	left: '20px',
-				// 	width: '180px',
-				// 	display: 'flex',
-				// 	justifyContent: 'center',
-				// 	alignItems: 'center',
-				// 	gap: '10px'
-				// }}
-				className='absolute bottom-5 left-5 w-[180px] flex justify-center items-center gap-3'
+				className='absolute bottom-5 left-5 w-[180px] flex justify-center items-center gap-3 font-bold'
 				onClick={() => dispatch(logOut())}
 			>
 				<AiOutlineLogout />
