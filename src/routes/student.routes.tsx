@@ -1,5 +1,5 @@
 import StudentDashboard from '../pages/student/StudentDashboard';
-import StudentProfile from '../pages/student/StudentProfile';
+import StudentOfferedCourses from '../pages/student/StudentOfferedCourses';
 
 export const studentPaths = [
 	{
@@ -8,8 +8,8 @@ export const studentPaths = [
 		element: <StudentDashboard />
 	},
 	{
-		name: 'Profile',
-		path: 'profile',
-		element: <StudentProfile />
+		name: 'Offered Courses',
+		path: 'offered-courses',
+		element: <StudentOfferedCourses />
 	}
 ];
