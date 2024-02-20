@@ -21,7 +21,7 @@ export const monthNamesOptions = monthNames.map((month) => ({
 export const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export const dayNamesOptions = dayNames.map((day) => ({
-	value: day,
+	value: day.slice(0, 3),
 	label: day
 }));
 

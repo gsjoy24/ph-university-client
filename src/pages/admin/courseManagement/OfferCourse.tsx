@@ -1,16 +1,19 @@
 import { Button, Col, Form, Row, Spin, TimePicker } from 'antd';
+import moment from 'moment';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
-
 import PHTitle from '../../../components/PHTitle';
-
 import PHForm from '../../../components/form/PHForm';
 import PHInput from '../../../components/form/PHInput';
 import PHSelect from '../../../components/form/PHSelect';
-import { useGetAllAcademicDepartmentsQuery } from '../../../redux/features/admin/academicManagement.api';
+import {
+	useGetAllAcademicDepartmentsQuery,
+	useGetAllAcademicFacultiesQuery
+} from '../../../redux/features/admin/academicManagement.api';
 import {
 	useGetAllCoursesQuery,
 	useGetAllRegisteredSemestersQuery,
 	useGetCourseFacultiesQuery,
+	useOfferCourseMutation,
 	useRegisterSemesterMutation
 } from '../../../redux/features/admin/courseManagement.api';
 
@@ -24,10 +27,7 @@ import { TResponse } from '../../../types/global.type';
 const OfferCourse = () => {
 	const [courseId, setCourseId] = useState<string | undefined>('');
 
-	// registerSemester is a function that is used to register a semester
-	const [registerSemester, { isLoading }] = useRegisterSemesterMutation();
-
-	//*  academic departments and options
+	//!  academic departments and options
 	const { data: academicDepartments, isLoading: DepartmentsIsLoading } = useGetAllAcademicDepartmentsQuery([
 		{
 			name: 'sort',
@@ -37,6 +37,19 @@ const OfferCourse = () => {
 	const departmentOptions = academicDepartments?.data?.map((department) => ({
 		label: department?.name,
 		value: department?._id
+	}));
+
+	// ! academic faculties and options
+	const { data: academicFaculties, isLoading: facultiesIsLoading } = useGetAllAcademicFacultiesQuery([
+		{
+			name: 'sort',
+			value: 'name'
+		}
+	]);
+
+	const academicFacultyOptions = academicFaculties?.data?.map((faculty) => ({
+		label: faculty?.name,
+		value: faculty?._id
 	}));
 
 	//! courses and options
@@ -55,17 +68,29 @@ const OfferCourse = () => {
 		value: semester?._id
 	}));
 
+	// ! course faculties and options
 	const { data: courseFaculties, isLoading: facultiesLoading } = useGetCourseFacultiesQuery(courseId, {
 		skip: !courseId
 	});
-	const facultyOptions =
+
+	const courseFacultyOptions =
 		courseFaculties?.data?.faculties?.map((faculty: TFaculty) => ({
 			label: faculty?.fullName,
 			value: faculty?._id
 		})) || [];
 
+	// ! on submit
+	const [addOfferedCourse, { isLoading }] = useOfferCourseMutation();
 	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-		console.log(data.startTime, data.endTime);
+		const offeredCourseData = {
+			...data,
+			maxCapacity: Number(data.maxCapacity),
+			startTime: moment(new Date(data.startTime)).format('HH:mm'),
+			endTime: moment(new Date(data.endTime)).format('HH:mm')
+		};
+
+		const res = await addOfferedCourse(offeredCourseData);
+		console.log(res);
 	};
 
 	return (
@@ -99,7 +124,10 @@ const OfferCourse = () => {
 							/>
 						</Col>
 						<Col span={12}>
-							<PHSelect label='Faculty' name='faculty' options={facultyOptions} disabled={!courseId} />
+							<PHSelect label='Academic Faculty' name='academicFaculty' options={academicFacultyOptions} />
+						</Col>
+						<Col span={12}>
+							<PHSelect label='Faculty' name='faculty' options={courseFacultyOptions} disabled={!courseId} />
 						</Col>
 						<Col span={12}>
 							<PHSelect label='Semester' name='semesterRegistration' options={semesterOptions} disabled={SisLoading} />
@@ -143,7 +171,7 @@ const OfferCourse = () => {
 						</Col>
 					</Row>
 
-					<Button block type='primary' htmlType='submit' disabled={isLoading || SisLoading}>
+					<Button block type='primary' htmlType='submit' disabled={isLoading || SisLoading} loading={isLoading}>
 						{isLoading ? <Spin /> : 'Create'}
 					</Button>
 				</PHForm>
