@@ -34,6 +34,6 @@ const studentCourseApi = baseApi.injectEndpoints({
 	})
 });
 
-export const { useAddStudentMutation, useGetAllOfferedCoursesQuery } = studentCourseApi;
+export const { useGetAllOfferedCoursesQuery } = studentCourseApi;
 
 export default studentCourseApi;
