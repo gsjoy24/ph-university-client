@@ -12,7 +12,7 @@ import { useAddFacultyMutation } from '../../../redux/features/admin/userManagem
 import { TFaculty, TResponse } from '../../../types';
 
 const CreateFaculty = () => {
-	const { data: DData, isLoading: DisLoading } = useGetAllAcademicDepartmentsQuery(null);
+	const { data: DData, isLoading: DisLoading } = useGetAllAcademicDepartmentsQuery([{ name: 'sort', value: 'name' }]);
 	const departmentOptions = DData?.data?.map((department) => ({
 		label: department?.name,
 		value: department?._id
