@@ -1,4 +1,5 @@
-import { Button } from 'antd';
+import { Button, Col, Row } from 'antd';
+import Item from 'antd/es/list/Item';
 import PHTitle from '../../components/PHTitle';
 import { useGetAllOfferedCoursesQuery } from '../../redux/features/student/studentCourseManagement.api.';
 
@@ -25,39 +26,54 @@ const StudentOfferedCourses = () => {
 
 	const modifiedData = Object.values(singleObject || {});
 
-	return (
-		<div>
-			<PHTitle title='Offered Courses' />
-			<div className='mt-12'>
-				{modifiedData.map((course: any, index: number) => (
-					<div key={index} className='mb-6 border border-gray-600 p-3 w-max rounded-sm'>
-						<h1 className='text-2xl font-bold mb-3'>{course.courseTitle}</h1>
+	const handleEnroll = async (id) => {
+		const enrollData = {
+			offeredCourse: id
+		};
 
-						<div>
-							{course.sections.map((section: any, index: number) => (
-								<div key={index} className='mt-3'>
-									<p>Section: {section.section}</p>
-									<p>
-										Days:{' '}
-										{section.days.map((day: string, index: number) => (
-											<span key={index} className='mr-2'>
-												{day}
-											</span>
-										))}
-									</p>
-									<p>
-										Time: {section.startTime} - {section.endTime}
-									</p>
-								</div>
-							))}
+		const res = await enroll(enrollData);
+		console.log(res);
+	};
+
+	if (!modifiedData.length) {
+		return <p>No available courses</p>;
+	}
+
+	return (
+		<Row gutter={[0, 20]}>
+			{modifiedData.map((item, index) => {
+				return (
+					<Col span={24} style={{ border: 'solid #d4d4d4 2px' }} key={`daf${index}`}>
+						<div style={{ padding: '10px' }}>
+							<h2>{item.courseTitle}</h2>
 						</div>
-						<Button type='primary' className='mt-4'>
-							Enroll
-						</Button>
-					</div>
-				))}
-			</div>
-		</div>
+						<div>
+							{item.sections.map((section, index) => {
+								return (
+									<Row
+										justify='space-between'
+										align='middle'
+										style={{ borderTop: 'solid #d4d4d4 2px', padding: '10px' }}
+										key={`daaf${index}`}
+									>
+										<Col span={5}>Section: {section.section} </Col>
+										<Col span={5}>
+											days:{' '}
+											{section.days.map((day, index) => (
+												<span key={`day-${index}`}> {day} </span>
+											))}
+										</Col>
+										<Col span={5}>Start Time: {section.startTime} </Col>
+										<Col span={5}>End Time: {section.endTime} </Col>
+										<Button onClick={() => handleEnroll(section._id)}>Enroll</Button>
+									</Row>
+								);
+							})}
+						</div>
+					</Col>
+				);
+			})}
+		</Row>
 	);
 };
 

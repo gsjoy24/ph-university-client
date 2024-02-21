@@ -4,13 +4,14 @@ import { TFaculty, TQueryParams, TResponseRedux, TStudent } from '../../../types
 
 const studentCourseApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
-		addStudent: builder.mutation({
+		enrollCourse: builder.mutation({
 			query: (data) => ({
-				url: '/users/create-student',
+				url: '/enrolled-courses/create-enrolled-course',
 				method: 'POST',
 				body: data
 			})
 		}),
+
 		getAllOfferedCourses: builder.query({
 			query: (args) => {
 				const params = new URLSearchParams();
@@ -34,6 +35,5 @@ const studentCourseApi = baseApi.injectEndpoints({
 	})
 });
 
-export const { useGetAllOfferedCoursesQuery } = studentCourseApi;
-
+export const { useEnrollCourseMutation, useGetAllOfferedCoursesQuery } = studentCourseApi;
 export default studentCourseApi;
